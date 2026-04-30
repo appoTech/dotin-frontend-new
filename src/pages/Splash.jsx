@@ -75,7 +75,7 @@ class Splash extends Component {
       let originalURL = this.state.original_url;
 
       const click_link = document.getElementById("abcd");
-      console.log(app_intend);
+      console.log("this is app_intend: ",app_intend);
       if (app_intend === "Desktop" || app_intend === "Mobile") {
         app_intend = originalURL;
         /* console.log(app_intend) */
