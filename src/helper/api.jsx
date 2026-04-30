@@ -33,6 +33,7 @@ export async function getURLandredirect(tag,shorturl){
          if(res.status == 200){
              // test for status you want, etc
              console.log(res);
+             console.log("I am here--------");
              console.log(res.data);
              
              return res;
