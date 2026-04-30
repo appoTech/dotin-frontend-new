@@ -42,7 +42,7 @@ class Splash extends Component {
       intentvalue: "",
       original_url: "",
       ostype: "", 
-      countdown: 3,
+      countdown: 7,
       showRedirectText: true,
       redirectCanceled: false,
       showShareOptions: false,
