@@ -68,9 +68,9 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     getURLandredirect(apptag, shortstring).then((res) => {
-      this.setState({ intentvalue: res.data.app_intend });
-      this.setState({ original_url: res.data.originalURL });
-      this.setState({ ostype: res.data.os_type });
+      this.setState({ intentvalue: res.data.smartUrl.data.app_intend });
+      this.setState({ original_url: res.data.smartUrl.data.originalURL });
+      this.setState({ ostype: res.data.smartUrl.data.os_type });
       let app_intend = this.state.intentvalue;
       let originalURL = this.state.original_url;
 
