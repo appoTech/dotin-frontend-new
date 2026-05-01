@@ -211,7 +211,7 @@ class Splash extends Component {
     const carouselItems = [
       {
         image: video1,
-        link: "https://appopener.in/yt/0sjnsz5k8",
+        link: "https://appopener.com/yt/0sjnsz5k8",
         alt: "Video Thumbnail",
         width: 300,
         height: 200,
@@ -221,7 +221,7 @@ class Splash extends Component {
       },
       {
         image: appopeneryt,
-        link: "https://appopener.in/yt/1ea6xi5pc",
+        link: "https://appopener.com/yt/1ea6xi5pc",
         alt: "Video Thumbnail",
         width: 300,
         height: 200,
@@ -230,28 +230,8 @@ class Splash extends Component {
         description: "Not an Ordinary URL Shortner - AppOpener.com - Intro",
       },
       {
-        image: video2,
-        link: "https://shop.creatorcosmos.com/products/backflow-smoke-radhakrishn-shiva-with-20-smoke-incense-cone-for-living-room-bed-room-office-and-home-d-cor-10-cm",
-        alt: "Video Thumbnail",
-        width: 300,
-        height: 200,
-        aspectRatio: "1280/720",
-        title: "Cosmic Shop",
-        description: "AppOpener Radakrishna artifact and Shiva artifact Prem with 20 Smoke (KhushBoo) Incense Cone For Living Room, Bed room, Office and Home Decor",
-      },
-      {
-        image: video3,
-        link: "https://appopener.com/ig/40eh193sp",
-        alt: "Video Thumbnail",
-        width: 300,
-        height: 200,
-        aspectRatio: "1280/720",
-        title: "AlphaDrive",
-        description: "-- Unlock your consciousness --",
-      },
-      {
         image: video4,
-        link: "https://appopener.in/ig/mmunty2wp",
+        link: "https://appopener.com/ig/mmunty2wp",
         alt: "Video Thumbnail",
         width: 300,
         height: 200,
@@ -286,32 +266,26 @@ class Splash extends Component {
     return (
       <>
     <div className='main-container'>
-    <NewAdComponent />
-{/*     <AdComponent /> */}
-      <div className='header'>
-        <div className='user-details'>
-        <Link to="/">
-    <Avatar alt="logo" src={logo} sx={{ width: 58, height: 58 }} />
-  </Link>
-          <p className='user-tag'><span className=' pb-1 '>APPØ</span><span></span></p>
-        </div>
+      {/* <div className='header'> */}
+        {/* <div className='user-details'> */}
+        {/* <Link to="/"> */}
+    {/* <Avatar alt="logo" src={logo} sx={{ width: 58, height: 58 }} /> */}
+        {/* </Link> */}
+          {/* <p className='user-tag'><span className=' pb-1 '>AI</span><span></span></p> */}
+        {/* </div> */}
        {/*  <button onClick={this.handleShare}  className="share-button   border border-white text-white bg-white hover:bg-white hover:text-black rounded">
         <img className='share-img ' src={share} alt='Channel Logo' /> 
       </button> */}
 
-        <div className='subscribe-button bg-black ml-2'>
+        {/* <div className='subscribe-button bg-black ml-2'>
           <button onClick={this.handleShare} className="share-button bg-black   ml-2">
             <img className="share-img" src={share} alt="" />
             
           </button>
-        </div>
+        </div> */}
      
-      </div>
-      {this.state.showShareOptions && this.renderShareOptions()}
-    
-<div className="coming-soon-container mt-2">
-        <p className="sliding-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3rd &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4th &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5th &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;Trusted by more than 1 Billion Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &bull;Coming Soon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;"Your path to digital success starts here, with AppOpener" &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; </p>
-      </div>
+      {/* </div> */}
+      {/* {this.state.showShareOptions && this.renderShareOptions()} */}
 
       <div className='hero-section'>
         <div className='latest-link '>
@@ -439,9 +413,9 @@ class Splash extends Component {
         <Carousel items={carouselItems}/>
       </div> 
       <div className='expand-container'>
-        <ExpandableFooter/>
+        {/* <ExpandableFooter/> */}
       </div>
-      <Float/>
+      {/* <Float/> */}
       {this.state.showShareOptions && this.renderShareOptions()}
     </div>
   </>
