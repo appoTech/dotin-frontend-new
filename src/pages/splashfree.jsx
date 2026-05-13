@@ -35,15 +35,15 @@ import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
 
 
-class Splash extends Component {
+class Splash2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       intentvalue: "",
       original_url: "",
       ostype: "", 
-      countdown: 7,
-      showRedirectText: true,
+      countdown: 0,
+      showRedirectText: false,
       redirectCanceled: false,
       showShareOptions: false,
     };
@@ -69,30 +69,14 @@ class Splash extends Component {
     let shortstring = this.props.match.params.shorturl;
     getURLandredirect(apptag, shortstring).then((res) => {
       console.log("this is res: ",res);
-      this.setState({ intentvalue: res.data.smartUrl.data.app_intend });
-      this.setState({ original_url: res.data.smartUrl.data.originalURL });
-      this.setState({ ostype: res.data.smartUrl.data.os_type });
-      let app_intend = this.state.intentvalue;
-      let originalURL = this.state.original_url;
-
-      const click_link = document.getElementById("abcd");
-      console.log("this is app_intend: ",app_intend);
-      if (app_intend === "Desktop" || app_intend === "Mobile") {
-        app_intend = originalURL;
-        /* console.log(app_intend) */
-      }
-      let countdownInterval = setInterval(() => {
-        this.setState((prevState) => ({
-          countdown: prevState.countdown - 1,
-        }));
-
-        
-        if (this.state.countdown === 0) {
-          clearInterval(countdownInterval); 
-          this.setState({ showRedirectText: false }); 
-          this.handleRedirect(); 
-        }
-      }, 1000); 
+      this.setState({ 
+        intentvalue: res.data.smartUrl.data.app_intend,
+        original_url: res.data.smartUrl.data.originalURL,
+        ostype: res.data.smartUrl.data.os_type,
+        showRedirectText: false
+      }, () => {
+        this.handleRedirect();
+      });
     });
   }
   
@@ -426,4 +410,4 @@ class Splash extends Component {
 }
 
 
-export default Splash;
+export default Splash2;

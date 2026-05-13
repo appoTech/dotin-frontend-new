@@ -9,6 +9,7 @@ const Testpage = lazy(() => import('./pages/test') );
 const Dashboard_home = lazy(() => import('./dashboard/homepage') );
 // const Ads = lazy(() => import('./components/GoogleAd') );
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy') );
+const SplashFree = lazy(() => import('./pages/splashfree') );
 // const renderLoader = () => <p>Loading</p>;
 
 const PrivateRoute =(props)=>{
@@ -30,6 +31,7 @@ function App() {
             <Switch>
               <Route exact path='/' component={Homepage}></Route>
               <Route exact path='/:apptype/:shorturl' component={Splashpage}></Route>
+              <Route exact path='/free/:apptype/:shorturl' component={SplashFree}></Route>
               <Route exact path='/user' component={Testpage}></Route>
               <Route exact path='/privacypolicy' component={PrivacyPolicy}></Route>
               {/* <Route exact path='/ads.txt' component={Ads}></Route> */}

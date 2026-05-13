@@ -1,8 +1,13 @@
 import axios from "axios";
 import InApp from 'detect-inapp';
-let api_url =  "https://appopener-backend-1klr.onrender.com/";  //process.env.REACT_APP_opnr_api_url; 
-
+// let api_url =  "https://appopener-backend-1klr.onrender.com/";  //process.env.REACT_APP_opnr_api_url; 
+let api_url =  "http://localhost:5001/";
 export async function getURLandredirect(tag,shorturl){
+
+
+    // console.log("this is tag: ",tag);
+    // console.log("this is shorturl: ",shorturl);
+    // console.log("URL: ",api_url);
     //check for USERAGENT Values 
     const useragent = navigator.userAgent || navigator.vendor || window.opera;
     const inapp = new InApp(useragent);
@@ -30,10 +35,11 @@ export async function getURLandredirect(tag,shorturl){
                 "BrowserType": BrowserType
              }
          })
+        //  console.log("this is res: ",res);
          if(res.status == 200){
              // test for status you want, etc
              console.log(res);
-             console.log("I am here--------");
+            //  console.log("I am here--------");
              console.log(res.data);
              
              return res;
