@@ -97,9 +97,13 @@ class Splash extends Component {
   }
   
   handleRedirect() {
-      const app_intend = this.state.intentvalue === "Desktop" || this.state.intentvalue === "Mobile"
+      let app_intend = this.state.intentvalue === "Desktop" || this.state.intentvalue === "Mobile"
         ? this.state.original_url
         : this.state.intentvalue;
+
+      if (!app_intend || app_intend === "undefined") {
+          app_intend = this.state.original_url;
+      }
   
       if (this.state.ostype === "windows") {
           const click_link = document.getElementById("abcd");
