@@ -732,9 +732,9 @@ class Splash extends Component {
     </div>
   </div>
 </div>
-       <div className='caro-container'>
+       {/* <div className='caro-container'>
         <Carousel items={carouselItems}/>
-      </div> 
+      </div>  */}
       <div className='expand-container'>
         {/* <ExpandableFooter/> */}
       </div>
