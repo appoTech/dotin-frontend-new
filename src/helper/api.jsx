@@ -1,7 +1,8 @@
 import axios from "axios";
 import InApp from 'detect-inapp';
-let api_url =  "https://appopener-backend-1klr.onrender.com/";  //process.env.REACT_APP_opnr_api_url; 
+// let api_url =  "https://appopener-backend-1klr.onrender.com/";
 // let api_url =  "http://localhost:5001/";
+let api_url = process.env.REACT_APP_API_URL
 export async function getURLandredirect(tag,shorturl){
 
 

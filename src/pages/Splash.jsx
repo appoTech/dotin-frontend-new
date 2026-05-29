@@ -1,12 +1,15 @@
 import { Component } from "react";
 import React from "react";
-
+import { withRouter } from "react-router-dom";
 import { getURLandredirect } from "../helper/api";
 import "../css/splash.css";
 import Avatar from '@mui/material/Avatar';
 /* import CREATORS from "../assets/file.png"; */
 /* import youtube from "../assets/youtube.svg"; */
 /* import superprofile from "../assets/superprofile.png"; */
+import poster1 from "../assets/poster1.png";
+import poster2 from "../assets/poster2.png";
+import poster3 from "../assets/poster3.png";
 import video1 from "../assets/video1.avif";
 import video2 from "../assets/video2.PNG";
 import video3 from "../assets/video3.avif";
@@ -46,6 +49,24 @@ class Splash extends Component {
       showRedirectText: true,
       redirectCanceled: false,
       showShareOptions: false,
+      currentIndex: 0,
+      promotes: [
+    {
+      title: "PROMOTE YOUR SPACE",
+      linkUrl: "https://niviraa.com",
+      image: poster1,
+    },
+    {
+      title: "GET BOOSTED ON SOCIAL MEDIA",
+      linkUrl: "https://appopener.in/yt/tutorial1",
+      image: poster2,
+    },
+    {
+      title: "PROMOTE YOUR PROFILE",
+      linkUrl: "https://www.instagram.com/ispawnser/",
+      image: poster3,
+    },
+  ]
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
@@ -72,6 +93,17 @@ class Splash extends Component {
       this.setState({ intentvalue: res.data.smartUrl.data.app_intend });
       this.setState({ original_url: res.data.smartUrl.data.originalURL });
       this.setState({ ostype: res.data.smartUrl.data.os_type });
+      const newPromotes = Array.isArray(
+            res?.data?.weeklyPromotes?.data.data
+          )
+            ? res.data.weeklyPromotes.data.data.reverse()
+            : [];
+      console.log("New Promotes from API: ", newPromotes);
+      console.log(res?.data?.weeklyPromotes.data.data);
+      this.setState((prevState) => ({
+        promotes: [...newPromotes,...prevState.promotes]
+      }));
+
       let app_intend = this.state.intentvalue;
       let originalURL = this.state.original_url;
 
@@ -94,7 +126,27 @@ class Splash extends Component {
         }
       }, 1000); 
     });
+
+    this.promoteInterval = setInterval(() => {
+      this.setState((prevState) => ({
+        currentIndex: prevState.promotes.length > 0 ? (prevState.currentIndex + 1) % prevState.promotes.length : 0
+      }));
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    if (this.promoteInterval) clearInterval(this.promoteInterval);
+  }
+
+  openPopup = (state, type) => {
+    console.log("Type is : ", type);
+    const link = encodeURIComponent(window.location.href);
+    if (type === "promote") {
+      this.props.history.push(`/express/promote?link=${link}`);
+    } else {
+      this.props.history.push(`/express/pager?link=${link}&type=${type}`);
+    }
+  };
   
   handleRedirect() {
       let app_intend = this.state.intentvalue === "Desktop" || this.state.intentvalue === "Mobile"
@@ -213,6 +265,23 @@ class Splash extends Component {
   );
 
   render() {
+    const { promotes = [], currentIndex = 0 } = this.state;
+    const openPopup = this.openPopup;
+    const state = this.state;
+    const setCurrentIndex = (index) => this.setState({ currentIndex: index });
+    const currentTheme = {
+      bg: "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900",
+      text: "text-white",
+      navbar: "bg-indigo-950/60 border-indigo-500",
+      button: "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-400",
+      card: "bg-slate-900/60 border-indigo-600",
+      accent: "text-indigo-300",
+      shadow: "shadow-indigo-500",
+      topNav: "backdrop-blur-lg border-b border-[#9D4EDD] shadow-[0_0_15px_#9D4EDD]/50",
+      videoGlow: "shadow-[0_0_25px_#00F5FF]/60",
+      iconBorder: "border-white/20",
+      promoteBtn: "bg-gray-400 border-gray-600 text-black hover:bg-gray-500",
+    };
     const carouselItems = [
       {
         image: video1,
@@ -414,6 +483,255 @@ class Splash extends Component {
       </div>
 
       </div>
+      <div
+  style={{
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "auto",
+    padding: "0 12px",
+  }}
+>
+  {/* HEADER */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "14px",
+      flexWrap: "wrap",
+      gap: "10px",
+    }}
+  >
+    <button
+      onClick={() => openPopup(state, "promote")}
+      style={{
+        background: "#1b1c5c",
+        color: "#ffe066",
+        border: "2px solid #facc15",
+        borderRadius: "16px",
+        padding: "14px 18px",
+        fontSize: "24px",
+        fontWeight: "700",
+        cursor: "pointer",
+        boxShadow: "0 0 18px rgba(255,215,0,0.2)",
+      }}
+    >
+      Spawnser the feat ✨ - $11
+    </button>
+  </div>
+
+  {/* MAIN CARD */}
+  <div
+    style={{
+      background: "#07113d",
+      border: "2px solid #4f46e5",
+      borderRadius: "28px",
+      padding: "20px",
+      width: "100%",
+    }}
+  >
+    {/* FEATURED */}
+    {promotes.length > 0 && (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <a
+          href={promotes[currentIndex]?.linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            width: "100%",
+            maxWidth: "800px",
+            position: "relative",
+            overflow: "hidden",
+            borderRadius: "24px",
+            textDecoration: "none",
+          }}
+        >
+          <img
+            src={promotes[currentIndex]?.image}
+            alt={promotes[currentIndex]?.title}
+            style={{
+              width: "100%",
+              borderRadius: "24px",
+              objectFit: "cover",
+              maxHeight: "500px",
+            }}
+          />
+
+          {/* TITLE */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "14px",
+              left: "14px",
+              background: "rgba(0,0,0,0.7)",
+              color: "white",
+              padding: "8px 14px",
+              borderRadius: "10px",
+              fontWeight: "700",
+              fontSize: "20px",
+            }}
+          >
+            {promotes[currentIndex]?.title}
+          </div>
+
+          {/* FLOAT ICON */}
+          <div
+            style={{
+              position: "absolute",
+              right: "14px",
+              bottom: "20px",
+              width: "60px",
+              height: "60px",
+              borderRadius: "50%",
+              background: "black",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "2px solid #d946ef",
+            }}
+          >
+            <img
+              src={logo}
+              alt="logo"
+              style={{
+                width: "34px",
+                height: "34px",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+        </a>
+      </div>
+    )}
+
+    {/* PROMOTE BUTTON */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "30px",
+      }}
+    >
+      <button
+        onClick={() => openPopup(state, "promote")}
+        style={{
+          width: "100%",
+          maxWidth: "500px",
+          borderRadius: "22px",
+          background: "#c9ced6",
+          border: "2px solid #6b7280",
+          padding: "40px 20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "40px",
+            fontWeight: "900",
+            color: "black",
+            lineHeight: 1,
+          }}
+        >
+          +
+        </div>
+
+        <div
+          style={{
+            fontSize: "24px",
+            fontWeight: "700",
+            color: "black",
+            marginTop: "10px",
+          }}
+        >
+          Promote it 🚀
+        </div>
+      </button>
+    </div>
+
+    {/* CARDS */}
+    <div
+      style={{
+        display: "flex",
+        gap: "16px",
+        overflowX: "auto",
+        padding: "30px 0 10px",
+        marginTop: "10px",
+      }}
+    >
+      {Array.isArray(promotes) &&
+        promotes.length > 1 &&
+        promotes.map((item, idx) => (
+          <div
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            style={{
+              minWidth: "150px",
+              background: "#1b234f",
+              borderRadius: "18px",
+              overflow: "hidden",
+              cursor: "pointer",
+              border:
+                idx === currentIndex
+                  ? "2px solid #facc15"
+                  : "2px solid transparent",
+              transform:
+                idx === currentIndex ? "scale(1.05)" : "scale(1)",
+              opacity: idx === currentIndex ? 1 : 0.8,
+              transition: "0.3s",
+              position: "relative",
+            }}
+          >
+            {/* PRICE */}
+            <div
+              style={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                background: "rgba(0,0,0,0.7)",
+                color: "white",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "14px",
+              }}
+            >
+              ₹10
+            </div>
+
+            <img
+              src={item.image || video1}
+              alt={item.title}
+              style={{
+                width: "100%",
+                height: "130px",
+                objectFit: "cover",
+              }}
+            />
+
+            <div
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "12px",
+                fontWeight: "700",
+                fontSize: "18px",
+              }}
+            >
+              {item.title}
+            </div>
+          </div>
+        ))}
+    </div>
+  </div>
+</div>
        <div className='caro-container'>
         <Carousel items={carouselItems}/>
       </div> 
@@ -430,4 +748,4 @@ class Splash extends Component {
 }
 
 
-export default Splash;
+export default withRouter(Splash);
