@@ -7,9 +7,9 @@ import Avatar from '@mui/material/Avatar';
 /* import CREATORS from "../assets/file.png"; */
 /* import youtube from "../assets/youtube.svg"; */
 /* import superprofile from "../assets/superprofile.png"; */
-import poster1 from "../assets/poster1.png";
-import poster2 from "../assets/poster2.png";
-import poster3 from "../assets/poster3.png";
+import poster1 from "../assets/niviraa_compressed.png";
+import poster2 from "../assets/ai1.jpg";
+import ai1 from "../assets/featured/ai1.jpg";
 import video1 from "../assets/video1.avif";
 import video2 from "../assets/video2.PNG";
 import video3 from "../assets/video3.avif";
@@ -64,7 +64,7 @@ class Splash extends Component {
     {
       title: "PROMOTE YOUR PROFILE",
       linkUrl: "https://www.instagram.com/ispawnser/",
-      image: poster3,
+      image: logo,
     },
   ]
     };
