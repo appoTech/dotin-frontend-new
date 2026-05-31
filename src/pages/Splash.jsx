@@ -58,7 +58,7 @@ class Splash extends Component {
     },
     {
       title: "GET BOOSTED ON SOCIAL MEDIA",
-      linkUrl: "https://appopener.in/yt/tutorial1",
+      linkUrl: "https://appopener.com/yt/tutorial1",
       image: poster2,
     },
     {
