@@ -7,8 +7,9 @@ import Avatar from '@mui/material/Avatar';
 /* import CREATORS from "../assets/file.png"; */
 /* import youtube from "../assets/youtube.svg"; */
 /* import superprofile from "../assets/superprofile.png"; */
-import poster1 from "../assets/niviraa_compressed.png";
-import poster2 from "../assets/ai1.jpg";
+import poster1 from "../assets/poster1.jpeg";
+import poster2 from "../assets/poster2.jpeg";
+import poster3 from "../assets/poster3.jpeg";
 import video1 from "../assets/video1.avif";
 import video2 from "../assets/video2.PNG";
 import video3 from "../assets/video3.avif";
@@ -53,17 +54,17 @@ class Splash extends Component {
     {
       title: "PROMOTE YOUR SPACE",
       linkUrl: "https://appopener.com/yt/share",
-      image: poster1,
+      image: poster2,
     },
     {
       title: "GET BOOSTED ON SOCIAL MEDIA",
       linkUrl: "https://appopener.com/yt/tutorial1",
-      image: poster2,
+      image: poster3,
     },
     {
       title: "PROMOTE YOUR PROFILE",
       linkUrl: "https://www.instagram.com/ispawnser/",
-      image: logo,
+      image: poster1,
     },
   ]
     };
@@ -537,10 +538,20 @@ class Splash extends Component {
           justifyContent: "center",
         }}
       >
-        <a
-          href={promotes[currentIndex]?.linkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
+  onClick={() => {
+    const isLastThree =
+      currentIndex >= promotes.length - 3;
+
+    if (isLastThree) {
+      openPopup(state, "promote");
+    } else {
+      window.open(
+        promotes[currentIndex]?.linkUrl,
+        "_blank"
+      );
+    }
+  }}
           style={{
             width: "100%",
             maxWidth: "800px",
@@ -604,7 +615,7 @@ class Splash extends Component {
               }}
             />
           </div>
-        </a>
+        </div>
       </div>
     )}
 
@@ -693,13 +704,14 @@ class Splash extends Component {
             <div
               style={{
                 position: "absolute",
-                top: "8px",
-                right: "8px",
+                top: "5px",
+                right: "5px",
                 background: "rgba(0,0,0,0.7)",
                 color: "white",
                 padding: "4px 8px",
                 borderRadius: "8px",
-                fontSize: "14px",
+                fontSize: "20px",
+                fontWeight: "bold",
               }}
             >
               ₹10
