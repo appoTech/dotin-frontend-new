@@ -9,7 +9,6 @@ import Avatar from '@mui/material/Avatar';
 /* import superprofile from "../assets/superprofile.png"; */
 import poster1 from "../assets/niviraa_compressed.png";
 import poster2 from "../assets/ai1.jpg";
-import ai1 from "../assets/featured/ai1.jpg";
 import video1 from "../assets/video1.avif";
 import video2 from "../assets/video2.PNG";
 import video3 from "../assets/video3.avif";
