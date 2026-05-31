@@ -53,7 +53,7 @@ class Splash extends Component {
       promotes: [
     {
       title: "PROMOTE YOUR SPACE",
-      linkUrl: "https://niviraa.com",
+      linkUrl: "https://appopener.com/yt/share",
       image: poster1,
     },
     {
