@@ -562,7 +562,7 @@ class Splash extends Component {
           }}
         >
           <img
-            src={promotes[currentIndex]?.image}
+            src={promotes[currentIndex].image || video1}
             alt={promotes[currentIndex]?.title}
             style={{
               width: "100%",
