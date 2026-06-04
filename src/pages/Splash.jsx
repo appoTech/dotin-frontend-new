@@ -76,7 +76,7 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     recordClick(apptag, shortstring, 'iframe_overlay');
-    this.handleRedirect();
+    window.location.assign("https://www.youtube.com/watch?v=vg-d1NrIyOc");
   }
 
   stopRedirecting() {
