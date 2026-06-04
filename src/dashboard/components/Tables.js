@@ -1,5 +1,11 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import ButtonMUI from "@mui/material/Button";
+import { getClickStats } from "../../helper/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faGlobeEurope, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FaCopy, FaGlobe, FaGlobeAsia, FaInstagram,FaRegCopy,FaYoutube } from 'react-icons/fa';
@@ -31,6 +37,18 @@ const ValueChange = ({ value, suffix }) => {
 
 
 export const PageTrafficTable = (props) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleShowStats = (id) => {
+    setSelectedId(id);
+    setDialogOpen(true);
+  };
+
+  const handleCloseStats = () => {
+    setDialogOpen(false);
+    setSelectedId(null);
+  };
  
   table_data = props.data;
   table_data = table_data.map((item, index) => ({index, ...item}));
@@ -110,7 +128,23 @@ export const PageTrafficTable = (props) => {
              (tag==="Instagram")?<FaInstagram size="24px" style={{"color":"brown"}}/>:
              (tag==="Other")?<FaGlobeAsia size="24px" style={{"color":"#3588fc"}}/>:""
              }</td>
-        <td>{click_count}</td>
+        <td>
+          <span 
+            onClick={() => handleShowStats(id)} 
+            style={{ 
+              cursor: "pointer", 
+              color: "#3366BB", 
+              textDecoration: "underline",
+              fontWeight: "600",
+              display: "inline-flex",
+              alignItems: "center"
+            }}
+            title="Click to view analytics details"
+          >
+            {click_count}
+            <FontAwesomeIcon icon={faEye} size="xs" style={{ marginLeft: "6px", opacity: 0.8 }} />
+          </span>
+        </td>
        
         <td><Moment format="DD/MM/YYYY">{created_at}</Moment></td>
 
@@ -141,6 +175,134 @@ export const PageTrafficTable = (props) => {
           </tbody>
         </Table>
       </Card.Body>
+      <ClickStatsDialog open={dialogOpen} handleClose={handleCloseStats} shortUrl={selectedId} />
     </Card>
+  );
+};
+
+const ClickStatsDialog = ({ open, handleClose, shortUrl }) => {
+  const [stats, setStats] = useState({
+    clicks1Day: 0,
+    clicks2Days: 0,
+    clicks3Days: 0,
+    clicksLastWeek: 0,
+    clicksLastMonth: 0,
+    totalClicks: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (open && shortUrl) {
+      setLoading(true);
+      getClickStats(shortUrl).then((data) => {
+        if (data) {
+          setStats(data);
+        }
+        setLoading(false);
+      });
+    } else if (!open) {
+      setStats({
+        clicks1Day: 0,
+        clicks2Days: 0,
+        clicks3Days: 0,
+        clicksLastWeek: 0,
+        clicksLastMonth: 0,
+        totalClicks: 0
+      });
+    }
+  }, [open, shortUrl]);
+
+  return (
+    <Dialog 
+      open={open} 
+      onClose={handleClose} 
+      maxWidth="xs" 
+      fullWidth
+      PaperProps={{
+        style: {
+          background: "radial-gradient(circle at -4% -12.9%, rgb(30, 33, 48) 0.3%, rgb(15, 17, 26) 90.2%)",
+          color: "white",
+          borderRadius: "20px",
+          padding: "10px",
+          border: "1px solid rgba(255, 255, 255, 0.1)"
+        }
+      }}
+    >
+      <DialogTitle 
+        style={{ 
+          fontFamily: "'Outfit', 'Montserrat', sans-serif", 
+          fontWeight: 700, 
+          fontSize: "22px",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          paddingBottom: "15px",
+          textAlign: "center",
+          background: "linear-gradient(90deg, #00f2fe 0%, #4facfe 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent"
+        }}
+      >
+        Click Analytics Stats
+      </DialogTitle>
+      <DialogContent style={{ marginTop: "20px" }}>
+        {loading ? (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "180px", flexDirection: "column", gap: "15px" }}>
+            <div className="spinner-border text-info" role="status" style={{ width: "3rem", height: "3rem" }}>
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p style={{ color: "#aaa", fontSize: "14px" }}>Fetching click metrics...</p>
+          </div>
+        ) : (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+              
+              <div style={{ background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", padding: "12px", textAlign: "center", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                <p style={{ color: "#8ab4f8", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>1 Day</p>
+                <h3 style={{ fontSize: "28px", fontWeight: "800", margin: "5px 0 0", color: "#8ab4f8" }}>{stats.clicks1Day}</h3>
+              </div>
+              
+              <div style={{ background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", padding: "12px", textAlign: "center", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                <p style={{ color: "#c58af9", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>2 Days</p>
+                <h3 style={{ fontSize: "28px", fontWeight: "800", margin: "5px 0 0", color: "#c58af9" }}>{stats.clicks2Days}</h3>
+              </div>
+
+              <div style={{ background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", padding: "12px", textAlign: "center", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                <p style={{ color: "#ff8a80", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>3 Days</p>
+                <h3 style={{ fontSize: "28px", fontWeight: "800", margin: "5px 0 0", color: "#ff8a80" }}>{stats.clicks3Days}</h3>
+              </div>
+
+              <div style={{ background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", padding: "12px", textAlign: "center", border: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                <p style={{ color: "#ffb74d", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>1 Week</p>
+                <h3 style={{ fontSize: "28px", fontWeight: "800", margin: "5px 0 0", color: "#ffb74d" }}>{stats.clicksLastWeek}</h3>
+              </div>
+            </div>
+
+            <div style={{ background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", padding: "12px", textAlign: "center", border: "1px solid rgba(255, 255, 255, 0.05)", marginTop: "12px" }}>
+              <p style={{ color: "#81c784", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>1 Month</p>
+              <h3 style={{ fontSize: "28px", fontWeight: "800", margin: "5px 0 0", color: "#81c784" }}>{stats.clicksLastMonth}</h3>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px", padding: "10px 5px 0", borderTop: "1px solid rgba(255, 255, 255, 0.05)", fontSize: "12px", color: "#888" }}>
+              <span>Link ID: <strong style={{ color: "#ddd" }}>{shortUrl}</strong></span>
+              <span>Total Clicks: <strong style={{ color: "#81c784" }}>{stats.totalClicks}</strong></span>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+      <DialogActions style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)", marginTop: "10px", padding: "10px 15px" }}>
+        <ButtonMUI 
+          onClick={handleClose} 
+          style={{ 
+            color: "white", 
+            border: "1px solid rgba(255, 255, 255, 0.2)", 
+            borderRadius: "8px", 
+            padding: "5px 12px",
+            textTransform: "none",
+            fontSize: "13px"
+          }}
+        >
+          Close
+        </ButtonMUI>
+      </DialogActions>
+    </Dialog>
   );
 };

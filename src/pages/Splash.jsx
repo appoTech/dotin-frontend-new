@@ -1,7 +1,7 @@
 import { Component } from "react";
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { getURLandredirect } from "../helper/api";
+import { getURLandredirect, recordClick } from "../helper/api";
 import "../css/splash.css";
 import Avatar from '@mui/material/Avatar';
 /* import CREATORS from "../assets/file.png"; */
@@ -70,6 +70,13 @@ class Splash extends Component {
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
+  }
+
+  handleOverlayClick = () => {
+    let apptag = this.props.match.params.apptype;
+    let shortstring = this.props.match.params.shorturl;
+    recordClick(apptag, shortstring, 'iframe_overlay');
+    this.handleRedirect();
   }
 
   stopRedirecting() {
@@ -365,17 +372,20 @@ class Splash extends Component {
         <div className='latest-link '>
    
           <div className='latest-link-img  '>
-             <iframe className="vid"
-             /* width="100%"
-             height="auto" */
-      
-      src="https://www.youtube.com/embed/ZAmiTLmmznw?autoplay=1&loop=1&mute=1"
-      title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerPolicy="strict-origin-when-cross-origin"
-      allowFullScreen
-    ></iframe>
+            <div className="iframe-container">
+              <iframe className="vid"
+              /* width="100%"
+              height="auto" */
+       
+       src="https://www.youtube.com/embed/vg-d1NrIyOc?autoplay=1&loop=1&mute=1"
+       title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
+       frameBorder="0"
+       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+       referrerPolicy="strict-origin-when-cross-origin"
+       allowFullScreen
+     ></iframe>
+              <div className="iframe-overlay" onClick={this.handleOverlayClick}></div>
+            </div>
            {/*  <img src={video1} alt="Video thumbnail"></img> */}
 {/*             <div className="glass-effect">
   <p className='text-sm font-bold text-white'>AppOpener</p>
