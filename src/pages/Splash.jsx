@@ -377,7 +377,7 @@ class Splash extends Component {
               /* width="100%"
               height="auto" */
        
-       src="https://www.youtube.com/embed/vg-d1NrIyOc?autoplay=1&loop=1&mute=1"
+       src="https://www.youtube.com/embed/3322Xvtc8SY?autoplay=1&loop=1&mute=1"
        title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
