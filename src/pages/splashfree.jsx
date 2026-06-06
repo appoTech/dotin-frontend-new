@@ -33,6 +33,7 @@ import ExpandableFooter from '../components/ExpandableFooter';
 import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
+import mapBg from "../assets/map-bg.png";
 
 
 class Splash2 extends Component {
@@ -258,6 +259,12 @@ class Splash2 extends Component {
     return (
       <>
     <div className='main-container'>
+      <img
+        src={mapBg}
+        alt=""
+        loading="lazy"
+        className="splash-bg"
+      />
       {/* <div className='header'> */}
         {/* <div className='user-details'> */}
         {/* <Link to="/"> */}
