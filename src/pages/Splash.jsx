@@ -385,7 +385,7 @@ class Splash extends Component {
               height="auto" */
        
        src="https://www.youtube.com/embed/V_EoyHonS5w?autoplay=1&loop=1&mute=1"
-       title="HOLI TRIP | When Life gives you LEMONS, "Kaat ke Chaat Lo" | Shiv Trance Holi Vlog"
+       title="HOLI TRIP | When Life gives you LEMONS, 'Kaat ke Chaat Lo' | Shiv Trance Holi Vlog"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
        referrerPolicy="strict-origin-when-cross-origin"
