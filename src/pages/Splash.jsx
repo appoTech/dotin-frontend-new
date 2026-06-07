@@ -77,7 +77,7 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     recordClick(apptag, shortstring, 'iframe_overlay');
-    window.location.assign("https://www.youtube.com/watch?v=3322Xvtc8SY");
+    window.location.assign("https://www.youtube.com/watch?v=V_EoyHonS5w");
   }
 
   stopRedirecting() {
@@ -384,8 +384,8 @@ class Splash extends Component {
               /* width="100%"
               height="auto" */
        
-       src="https://www.youtube.com/embed/3322Xvtc8SY?autoplay=1&loop=1&mute=1"
-       title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
+       src="https://www.youtube.com/embed/V_EoyHonS5w?autoplay=1&loop=1&mute=1"
+       title="HOLI TRIP | When Life gives you LEMONS, "Kaat ke Chaat Lo" | Shiv Trance Holi Vlog"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
        referrerPolicy="strict-origin-when-cross-origin"
