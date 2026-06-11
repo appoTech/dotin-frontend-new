@@ -38,6 +38,7 @@ import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
 import mapBg from "../assets/map-bg.png";
 import PipIframe from "./PipFrame1";
+import portalImage from "../assets/portal.png";
 
 
 class Splash extends Component {
@@ -764,8 +765,8 @@ class Splash extends Component {
             rel="noopener noreferrer"
           >
             <img
-              src="/banner.png"
-              alt="AppOpener banner"
+              src={portalImage} 
+              alt="AppOpener portal"
               className="w-full h-full object-cover"
             />
           </a>
