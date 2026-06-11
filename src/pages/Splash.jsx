@@ -775,15 +775,21 @@ class Splash extends Component {
   target="_blank"
   rel="noopener noreferrer"
 >
+  <div className="relative z-10 mb-4 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
   <img
     src={portalImage}
     alt="AppOpener portal"
-    style={{
-      maxWidth: "200px",
-      height: "auto",
-    }}
+    className="h-80 w-full object-cover sm:h-96"
   />
+</div>
 </a>
+        
+  <img
+    src="/portal.png"
+    alt="ShareTray banner"
+    
+  />
+</div>
   </>
 
     );
