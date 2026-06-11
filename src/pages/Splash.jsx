@@ -759,7 +759,7 @@ class Splash extends Component {
           </div>
         ))}
       <a
-            href="https://idplaywin.com/i-97mxpjwl56-n/"
+            href="https://www.appopener.com/"
             target="_blank"
             rel="noopener noreferrer"
           >
