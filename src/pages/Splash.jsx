@@ -37,7 +37,6 @@ import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
 import mapBg from "../assets/map-bg.png";
-import PipIframe from "./PipFrame1";
 import portalImage from "../assets/portal.png";
 
 
@@ -780,7 +779,6 @@ class Splash extends Component {
         {/* <ExpandableFooter/> */}
       </div>
       {/* <Float/> */}
-      <PipIframe src={"https://www.instagram.com/reel/DZVIu2Zv5nq/"} />
       {this.state.showShareOptions && this.renderShareOptions()}
     </div>
   </>
