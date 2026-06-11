@@ -758,6 +758,17 @@ class Splash extends Component {
             </div>
           </div>
         ))}
+      <a
+            href="https://idplaywin.com/i-97mxpjwl56-n/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/banner.png"
+              alt="AppOpener banner"
+              className="w-full h-full object-cover"
+            />
+          </a>
     </div>
   </div>
 </div>
