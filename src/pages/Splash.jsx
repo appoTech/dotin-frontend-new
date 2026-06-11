@@ -758,17 +758,6 @@ class Splash extends Component {
             </div>
           </div>
         ))}
-      <a
-            href="https://www.appopener.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={portalImage} 
-              alt="AppOpener portal"
-              className="w-full h-full object-cover"
-            />
-          </a>
     </div>
   </div>
 </div>
@@ -781,6 +770,20 @@ class Splash extends Component {
       {/* <Float/> */}
       {this.state.showShareOptions && this.renderShareOptions()}
     </div>
+        <a
+  href="https://www.appopener.com/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src={portalImage}
+    alt="AppOpener portal"
+    style={{
+      maxWidth: "200px",
+      height: "auto",
+    }}
+  />
+</a>
   </>
 
     );
