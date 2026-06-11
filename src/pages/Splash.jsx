@@ -781,15 +781,8 @@ class Splash extends Component {
     alt="AppOpener portal"
     className="h-80 w-full object-cover sm:h-96"
   />
-</div>
-</a>
-        
-  <img
-    src="/portal.png"
-    alt="ShareTray banner"
-    
-  />
-</div>
+  </div>
+  </a>
   </>
 
     );
