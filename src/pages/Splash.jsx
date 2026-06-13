@@ -37,7 +37,7 @@ import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
 import mapBg from "../assets/map-bg.png";
-import portalImage from "../assets/portal.png";
+import portalImage from "../assets/portal.jpeg";
 
 
 class Splash extends Component {
