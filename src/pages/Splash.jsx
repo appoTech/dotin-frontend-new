@@ -36,7 +36,7 @@ import ExpandableFooter from '../components/ExpandableFooter';
 import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
-import mapBg from "../assets/map-bg.png";
+import mapBg from "../assets/map-bg.jpeg";
 import portalImage from "../assets/portal.jpeg";
 
 
