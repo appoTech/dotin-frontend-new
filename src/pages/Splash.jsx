@@ -36,7 +36,8 @@ import ExpandableFooter from '../components/ExpandableFooter';
 import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
-import mapBg from "../assets/map-bg.png";
+import mapBg from "../assets/map-bg.jpeg";
+import portalImage from "../assets/portal.jpeg";
 
 
 class Splash extends Component {
@@ -77,7 +78,7 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     recordClick(apptag, shortstring, 'iframe_overlay');
-    window.location.assign("https://www.youtube.com/watch?v=3322Xvtc8SY");
+    window.location.assign("https://youtu.be/7OjqvqB0jE4");
   }
 
   stopRedirecting() {
@@ -384,8 +385,8 @@ class Splash extends Component {
               /* width="100%"
               height="auto" */
        
-       src="https://www.youtube.com/embed/3322Xvtc8SY?autoplay=1&loop=1&mute=1"
-       title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
+       src="https://www.youtube.com/embed/7OjqvqB0jE4?autoplay=1&loop=1&mute=1"
+       title="HOLI TRIP | When Life gives you LEMONS, 'Kaat ke Chaat Lo' | Shiv Trance Holi Vlog"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
        referrerPolicy="strict-origin-when-cross-origin"
@@ -731,7 +732,7 @@ class Splash extends Component {
                 fontWeight: "bold",
               }}
             >
-              ₹10
+              ₹25
             </div>
 
             <img
@@ -769,6 +770,19 @@ class Splash extends Component {
       {/* <Float/> */}
       {this.state.showShareOptions && this.renderShareOptions()}
     </div>
+        <a
+  href="https://www.appopener.com/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div className="relative z-10 mb-4 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+  <img
+    src={portalImage}
+    alt="AppOpener portal"
+    className="h-80 w-full object-cover sm:h-96"
+  />
+  </div>
+  </a>
   </>
 
     );
