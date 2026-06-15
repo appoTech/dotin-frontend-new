@@ -38,6 +38,7 @@ import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
 import mapBg from "../assets/map-bg.jpeg";
 import portalImage from "../assets/portal.jpeg";
+import PipIframe from "../components/PipIframe";
 
 
 class Splash extends Component {
@@ -783,6 +784,7 @@ class Splash extends Component {
   />
   </div>
   </a>
+  <PipIframe src={"https://www.instagram.com/reel/DYrsaGER61u/?igsh=dGw4cGJoYXl4cWhm"} />
   </>
 
     );
