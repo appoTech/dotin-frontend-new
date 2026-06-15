@@ -348,12 +348,12 @@ class Splash extends Component {
     return (
       <>
     <div className='main-container'>
-      <img
+      {/* <img
         src={mapBg}
         alt=""
         loading="lazy"
         className="splash-bg"
-      />
+      /> */}
       {/* <div className='header'> */}
         {/* <div className='user-details'> */}
         {/* <Link to="/"> */}
