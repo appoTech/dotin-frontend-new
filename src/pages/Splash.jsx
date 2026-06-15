@@ -39,6 +39,9 @@ import NewAdComponent from "../components/newAdComponent";
 import mapBg from "../assets/map-bg.jpeg";
 import portalImage from "../assets/portal.jpeg";
 import PipIframe from "../components/PipIframe";
+import ShareTray from "../components/ShareTray";
+// import avatarframe from "../assets/avatarframe.png";
+import avatarframe from "../assets/frame01.png"
 
 
 class Splash extends Component {
@@ -53,6 +56,7 @@ class Splash extends Component {
       redirectCanceled: false,
       showShareOptions: false,
       currentIndex: 0,
+      ytavatar: "",
       promotes: [
     {
       title: "PROMOTE YOUR SPACE",
@@ -69,10 +73,15 @@ class Splash extends Component {
       linkUrl: "https://www.instagram.com/ispawnser/",
       image: poster1,
     },
-  ]
+  ],
+      shareTrayOpen: false
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
+  }
+
+  onOpenShareTray = () => {
+    this.setState({ shareTrayOpen: true });
   }
 
   handleOverlayClick = () => {
@@ -113,7 +122,9 @@ class Splash extends Component {
       this.setState((prevState) => ({
         promotes: [...newPromotes,...prevState.promotes]
       }));
+      this.setState({ytavatar: res.data.ytChannelDetails.data.avatar})
 
+      console.log(res.data.ytChannelDetails.data.avatar)
       let app_intend = this.state.intentvalue;
       let originalURL = this.state.original_url;
 
@@ -276,6 +287,12 @@ class Splash extends Component {
 
   render() {
     const { promotes = [], currentIndex = 0 } = this.state;
+    const navItems = [
+      {},
+      {},
+      { icon: null }
+    ];
+    const displayLogo = <img src={this.state.ytavatar !== "" ? this.state.ytavatar : logo} alt="logo" referrerPolicy="no-referrer" style={{ width: '60px', height: '60px', borderRadius: '50%' }} />;
     const openPopup = this.openPopup;
     const state = this.state;
     const setCurrentIndex = (index) => this.setState({ currentIndex: index });
@@ -502,6 +519,22 @@ class Splash extends Component {
       </div>
 
       </div>
+<div
+      className="splash-share-btn"
+      onClick={() => this.onOpenShareTray()}
+    >
+      <div className="splash-share-inner">
+        <img
+          src={avatarframe}
+          alt=""
+          className="splash-share-avatarframe animate-spin-slow"
+        />
+        <div className="splash-share-icon-container">
+          {displayLogo}
+        </div>
+      </div>
+    </div>
+
       <div
   style={{
     width: "100%",
@@ -547,8 +580,10 @@ class Splash extends Component {
       borderRadius: "28px",
       padding: "20px",
       width: "100%",
+      position: "relative",
     }}
   >
+    
     {/* FEATURED */}
     {promotes.length > 0 && (
       <div
@@ -784,6 +819,11 @@ class Splash extends Component {
   />
   </div>
   </a>
+  <ShareTray 
+    open={this.state.shareTrayOpen} 
+    onOpenChange={(isOpen) => this.setState({ shareTrayOpen: isOpen })} 
+    setButtonText={(text) => console.log(text)} 
+  />
   <PipIframe src={"https://www.instagram.com/reel/DYrsaGER61u/?igsh=dGw4cGJoYXl4cWhm"} />
   </>
 

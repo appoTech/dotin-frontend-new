@@ -448,3 +448,64 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 .closeBtn{
   margin-left: 40%;
 }
+
+/* Splash Share Button Custom CSS */
+.splash-share-btn {
+  position: relative;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  border-radius: 50%;
+  background-color: #fff;
+  width: auto;
+  /* box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); */
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.2s ease-in-out;
+}
+
+.splash-share-btn:hover {
+  background-color: #4338ca;
+  transform: translateX(-50%) scale(1.05);
+}
+
+.splash-share-inner {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-share-avatarframe {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 104px;
+  height: 104px;
+}
+
+.splash-share-icon-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animate-spin-slow {
+  animation: spin-slow-anim 12s linear infinite;
+}
+
+@keyframes spin-slow-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
