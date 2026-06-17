@@ -2,6 +2,7 @@
 adster.tech, 12, DIRECT
 cereone.com, 12, DIRECT
 swiggy.com, 12, DIRECT
+google.com, pub-7141961244004347, DIRECT, f08c47fec0942fa0
 google.com, pub-9989685810655749, RESELLER, f08c47fec0942fa0
 datawrkz.com,:mwpmcm505_ID, DIRECT
 google.com, pub-8856559311549217, RESELLER, f08c47fec0942fa0
