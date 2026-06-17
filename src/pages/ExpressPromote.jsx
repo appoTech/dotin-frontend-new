@@ -7,7 +7,7 @@ import "./ExpressPromote.css";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001/";
 const POLL_INTERVAL = 3000;
 const MAX_POLLS = 10;
-const PROMOTE_PRICE = 10;
+const PROMOTE_PRICE = 25;
 
 // Load Cashfree SDK
 const loadCashfreeSDK = () => {
@@ -147,7 +147,7 @@ const ExpressPromote = () => {
 
       setStep("paying");
       const Cashfree = await loadCashfreeSDK();
-      const cashfree = Cashfree({ mode: "production" });
+      const cashfree = Cashfree({ mode: "sandbox" });
 
       cashfree
         .checkout({
