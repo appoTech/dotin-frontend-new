@@ -286,7 +286,7 @@ class Splash2 extends Component {
             {/* <div className="iframe-container"> */}
               {/* <iframe className="vid" */}
               {/* /* width="100%"
-              height="auto" */ */}
+              height="auto" */}
        
        {/* src="https://www.youtube.com/embed/ZAmiTLmmznw?autoplay=1&loop=1&mute=1"
        title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
