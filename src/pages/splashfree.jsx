@@ -33,7 +33,6 @@ import ExpandableFooter from '../components/ExpandableFooter';
 import share from "../assets/boot.avif";
 import NewAdComponent from "../components/newAdComponent";
 //import splash_adv from "../assets/splash/splash_adv.png";
-import mapBg from "../assets/map-bg.png";
 
 
 class Splash2 extends Component {
@@ -259,12 +258,6 @@ class Splash2 extends Component {
     return (
       <>
     <div className='main-container'>
-      <img
-        src={mapBg}
-        alt=""
-        loading="lazy"
-        className="splash-bg"
-      />
       {/* <div className='header'> */}
         {/* <div className='user-details'> */}
         {/* <Link to="/"> */}
@@ -290,20 +283,20 @@ class Splash2 extends Component {
         <div className='latest-link '>
    
           <div className='latest-link-img  '>
-            <div className="iframe-container">
-              <iframe className="vid"
+            {/* <div className="iframe-container"> */}
+              {/* <iframe className="vid" */}
               /* width="100%"
               height="auto" */
        
-       src="https://www.youtube.com/embed/ZAmiTLmmznw?autoplay=1&loop=1&mute=1"
+       {/* src="https://www.youtube.com/embed/ZAmiTLmmznw?autoplay=1&loop=1&mute=1"
        title="Krishna Opens Arjuna’s Third Eye | A Mind-Blowing Journey"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
        referrerPolicy="strict-origin-when-cross-origin"
        allowFullScreen
-     ></iframe>
-              <div className="iframe-overlay" onClick={this.handleOverlayClick}></div>
-            </div>
+     ></iframe> */}
+              {/* <div className="iframe-overlay" onClick={this.handleOverlayClick}></div>
+            </div> */}
            {/*  <img src={video1} alt="Video thumbnail"></img> */}
 {/*             <div className="glass-effect">
   <p className='text-sm font-bold text-white'>AppOpener</p>
@@ -312,13 +305,13 @@ class Splash2 extends Component {
               <MdOutlineIosShare color='white' size='11px'/>
             </button>  */}
 
-<div className='video-info flex'>
+{/* <div className='video-info flex'>
     <img className='channel-logo' src={creatoryt} alt='Channel Logo' />
     <div className='video-details'>
       <h4 className='video-title'>Monetise and Analyse with AppOpener</h4>
       <p className='channel-name'>CreatorCosmos</p>
     </div>
-  </div>
+  </div> */}
 
 
           </div>
@@ -383,7 +376,7 @@ class Splash2 extends Component {
         </div>
 
         {/* Cancel Button */}
-        {this.state.showRedirectText && (
+        {/* {this.state.showRedirectText && (
           <div className="cancel" id="cancel">
             <button
               style={{
@@ -396,7 +389,7 @@ class Splash2 extends Component {
               Cancel
             </button>
           </div>
-        )}
+        )} */}
        
         
         <div className='ml-2 flex '  >
@@ -418,7 +411,7 @@ class Splash2 extends Component {
         {/* <ExpandableFooter/> */}
       </div>
       {/* <Float/> */}
-      {this.state.showShareOptions && this.renderShareOptions()}
+      {/* {this.state.showShareOptions && this.renderShareOptions()} */}
     </div>
   </>
 
