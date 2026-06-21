@@ -88,7 +88,7 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     recordClick(apptag, shortstring, 'iframe_overlay');
-    window.location.assign("https://youtu.be/7OjqvqB0jE4");
+    window.location.assign("https://youtu.be/njHZ40CLIjA");
   }
 
   stopRedirecting() {
@@ -403,8 +403,8 @@ class Splash extends Component {
               /* width="100%"
               height="auto" */
        
-       src="https://www.youtube.com/embed/si=AiQnbWBwTMmH0yDn?autoplay=1&loop=1&mute=1"
-       title="HOLI TRIP | When Life gives you LEMONS, 'Kaat ke Chaat Lo' | Shiv Trance Holi Vlog"
+       src="https://www.youtube.com/embed/njHZ40CLIjA?autoplay=1&loop=1&mute=1"
+       title="Don8 Marketing by Appopener Influencers"
        frameBorder="0"
        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
        referrerPolicy="strict-origin-when-cross-origin"
