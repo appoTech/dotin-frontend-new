@@ -293,7 +293,7 @@ class Splash extends Component {
       });
 
       const Cashfree = await loadCashfreeSDK();
-      const cashfree = Cashfree({ mode: "sandbox" });
+      const cashfree = Cashfree({ mode: "production" });
 
       cashfree
         .checkout({
