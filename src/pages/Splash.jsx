@@ -730,9 +730,7 @@ class Splash extends Component {
       </div>
 <div
       className="splash-share-btn"
-      onClick={() => {
-        this.setState({ showAdOverlay: true, adHtml: getAdHtml() });
-      }}
+      onClick={() => this.setState({ shareTrayOpen: true })}
     >
       <div className="splash-share-inner">
         <img
