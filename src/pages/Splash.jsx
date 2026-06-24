@@ -43,7 +43,7 @@ import PipIframe from "../components/PipIframe";
 import ShareTray from "../components/ShareTray";
 // import avatarframe from "../assets/avatarframe.png";
 import avatarframe from "../assets/frame01.png"
-import { createAdBlobUrl } from "../components/AdPresentation";
+import { getAdHtml } from "../components/AdPresentation";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001/";
 
@@ -126,7 +126,7 @@ class Splash extends Component {
       vipOrderId: "",
       vipResult: null,
       showAdOverlay: false,
-      adBlobUrl: null
+      adHtml: null
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
@@ -731,8 +731,7 @@ class Splash extends Component {
 <div
       className="splash-share-btn"
       onClick={() => {
-        const url = createAdBlobUrl();
-        this.setState({ showAdOverlay: true, adBlobUrl: url });
+        this.setState({ showAdOverlay: true, adHtml: getAdHtml() });
       }}
     >
       <div className="splash-share-inner">
@@ -1169,10 +1168,14 @@ class Splash extends Component {
     <div className="ad-overlay">
       <div className="ad-iframe-container">
         <button className="ad-close-btn" onClick={() => {
-          if (this.state.adBlobUrl) URL.revokeObjectURL(this.state.adBlobUrl);
-          this.setState({ showAdOverlay: false, adBlobUrl: null });
+          this.setState({ showAdOverlay: false, adHtml: null });
         }}>✕ Close</button>
-        <iframe src={this.state.adBlobUrl || ''} style={{ width: '100%', height: '100%', border: 'none' }} title="AppOpener Presentation" />
+        <iframe
+          srcDoc={this.state.adHtml || ''}
+          sandbox="allow-scripts allow-same-origin"
+          style={{ width: '100%', height: '100%', border: 'none' }}
+          title="AppOpener Presentation"
+        />
       </div>
     </div>
   )}
