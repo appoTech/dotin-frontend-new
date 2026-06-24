@@ -243,6 +243,7 @@ class Splash extends Component {
   }
 
   openVipModal = () => {
+    this.stopRedirecting();
     this.setState({
       showVipModal: true,
       vipStep: "form",
