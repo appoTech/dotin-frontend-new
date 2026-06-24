@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AppOpener — Smarten Your Links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --black:#000000;
+  --white:#ffffff;
+  --red:#ff2d2d;
+  --red2:#ff6b00;
+  --accent:#00e5ff;
+  --dim:#1a1a1a;
+  --mid:#333;
+  --soft:#888;
+  --ff-head:'Bebas Neue',sans-serif;
+  --ff-body:'DM Sans',sans-serif;
+  --ff-mono:'Space Mono',monospace;
+}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;}
+
+/* ─── SCENE CONTAINER ─── */
+#ad{
+  width:100%;height:100vh;
+  position:relative;overflow:hidden;
+  background:#000;
+  font-family:var(--ff-body);
+}
+
+/* ─── NOISE GRAIN OVERLAY ─── */
+#ad::before{
+  content:'';position:absolute;inset:0;z-index:100;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.35;
+}
+
+/* ─── SCENES ─── */
+.scene{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .05s;
+}
+.scene.active{opacity:1;pointer-events:all;}
+
+/* ══════════ SCENE 1 — HOOK ══════════ */
+#s1{background:#000;overflow:hidden;}
+#s1 .scan-line{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--red);
+  animation:scanDown 1.2s ease-in-out forwards;
+  z-index:5;
+}
+@keyframes scanDown{from{top:0}to{top:100%}}
+#s1 .big-q{
+  font-family:var(--ff-head);
+  font-size:clamp(60px,12vw,140px);
+  color:#fff;
+  line-height:.9;
+  text-align:center;
+  opacity:0;
+  animation:none;
+}
+#s1 .big-q span{color:var(--red);}
+#s1 .sub1{
+  font-size:clamp(13px,2.2vw,22px);
+  color:var(--soft);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  font-family:var(--ff-mono);
+  margin-top:18px;
+  opacity:0;
+}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.7) translateY(30px);}
+  60%{opacity:1;transform:scale(1.05) translateY(-4px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* grid flash bg */
+#s1 .grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,45,45,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,45,45,.06) 1px,transparent 1px);
+  background-size:60px 60px;
+  opacity:0;
+  animation:gridFade 1s .3s forwards;
+}
+@keyframes gridFade{to{opacity:1;}}
+
+/* ══════════ SCENE 2 — PROBLEM ══════════ */
+#s2{background:#000;flex-direction:row;align-items:stretch;gap:0;}
+#s2 .pane{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px 20px;position:relative;
+}
+#s2 .pane:first-child{border-right:1px solid #222;}
+#s2 .pane-label{
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--soft);margin-bottom:16px;
+}
+#s2 .pane-icon{font-size:52px;margin-bottom:14px;opacity:0;}
+#s2 .pane-text{
+  font-family:var(--ff-head);font-size:clamp(28px,5vw,52px);
+  text-align:center;line-height:1;color:#fff;opacity:0;
+}
+#s2 .pane-desc{
+  font-size:clamp(11px,1.6vw,14px);color:var(--soft);
+  text-align:center;margin-top:10px;line-height:1.5;opacity:0;max-width:260px;
+}
+#s2 .bad{color:#555;}
+#s2 .x-mark{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:80px;opacity:0;color:#333;
+}
+#s2 .vs-divider{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  z-index:10;
+  background:#000;border:2px solid var(--red);
+  color:var(--red);font-family:var(--ff-head);font-size:22px;
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+}
+
+/* ══════════ SCENE 3 — PRODUCT DEMO ══════════ */
+#s3{background:#000;flex-direction:row;gap:0;align-items:stretch;}
+#s3 .demo-left{
+  width:42%;background:#0a0a0a;border-right:1px solid #1a1a1a;
+  display:flex;flex-direction:column;justify-content:center;padding:32px 28px;
+}
+#s3 .demo-right{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+#s3 .product-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0f0f0f;border:1px solid #222;
+  border-radius:20px;padding:5px 14px;margin-bottom:20px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--soft);
+  opacity:0;
+}
+#s3 .product-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+#s3 .demo-headline{
+  font-family:var(--ff-head);
+  font-size:clamp(32px,5.5vw,64px);
+  color:#fff;line-height:.92;
+  margin-bottom:16px;opacity:0;
+}
+#s3 .demo-headline em{
+  color:var(--red);font-style:normal;
+  -webkit-text-stroke:0px;
+}
+#s3 .demo-features{list-style:none;display:flex;flex-direction:column;gap:10px;opacity:0;}
+#s3 .demo-features li{
+  display:flex;align-items:center;gap:10px;
+  font-size:clamp(11px,1.6vw,14px);color:#bbb;
+}
+#s3 .demo-features li .chk{
+  width:18px;height:18px;border-radius:4px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;flex-shrink:0;
+}
+
+/* phone mock */
+#phone-mock{
+  width:min(220px,38vw);
+  background:#111;border:2px solid #222;border-radius:32px;
+  overflow:hidden;position:relative;opacity:0;
+  box-shadow:0 0 60px rgba(255,45,45,.15);
+}
+#phone-mock .notch{
+  width:80px;height:22px;background:#000;
+  border-radius:0 0 14px 14px;margin:0 auto;
+}
+#phone-mock .phone-screen{
+  padding:10px 12px 16px;min-height:320px;
+  display:flex;flex-direction:column;gap:8px;
+}
+#phone-mock .p-url{
+  background:#1a1a1a;border-radius:8px;padding:8px 10px;
+  font-family:var(--ff-mono);font-size:9px;color:#555;
+  display:flex;align-items:center;gap:6px;
+}
+#phone-mock .p-url .link-text{color:#ff2d2d;font-size:8px;}
+#phone-mock .p-arrow{
+  text-align:center;font-size:22px;color:var(--red);
+  animation:arrowBounce 1s infinite;
+}
+@keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+#phone-mock .p-app{
+  background:#1e1e1e;border-radius:12px;padding:10px;
+  display:flex;align-items:center;gap:8px;
+}
+#phone-mock .p-app .app-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  flex-shrink:0;
+}
+#phone-mock .p-app .app-name{font-size:11px;color:#ddd;font-weight:500;}
+#phone-mock .p-app .app-sub{font-size:9px;color:#666;margin-top:2px;}
+#phone-mock .p-tag{
+  background:#0d1a0d;border:1px solid #1a3a1a;border-radius:6px;
+  padding:6px 8px;font-family:var(--ff-mono);font-size:8px;color:#4caf50;
+  text-align:center;
+}
+
+/* ══════════ SCENE 4 — LEADERBOARD VIDEO ══════════ */
+#s4{background:#000;flex-direction:column;gap:0;}
+#s4 .s4-top{
+  width:100%;padding:16px 24px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#s4 .s4-eyebrow{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--soft);
+}
+#s4 .s4-headline{
+  font-family:var(--ff-head);font-size:clamp(22px,4vw,48px);
+  color:#fff;
+}
+#s4 .s4-headline span{color:var(--red);}
+#s4 .s4-badge{
+  background:var(--red);color:#fff;font-size:10px;font-weight:700;
+  border-radius:4px;padding:4px 10px;font-family:var(--ff-mono);
+  letter-spacing:1px;
+}
+#s4 .embed-frame{
+  flex:1;width:100%;position:relative;overflow:hidden;
+  border-top:1px solid #1a1a1a;
+}
+#s4 .embed-frame iframe{
+  width:100%;height:100%;border:none;
+  display:block;
+}
+#s4 .s4-overlay{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--red),var(--red2),var(--accent));
+}
+
+/* ══════════ SCENE 5 — CTA ══════════ */
+#s5{background:#000;overflow:hidden;}
+#s5 .red-bg{
+  position:absolute;inset:0;background:var(--red);
+  transform:scaleY(0);transform-origin:bottom;
+}
+#s5 .cta-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:30px 20px;
+}
+#s5 .cta-logo{
+  font-family:var(--ff-head);font-size:clamp(18px,4vw,40px);
+  color:#fff;letter-spacing:2px;margin-bottom:8px;opacity:0;
+}
+#s5 .cta-logo span{
+  background:#fff;color:var(--red);
+  padding:0 8px;border-radius:4px;
+}
+#s5 .cta-big{
+  font-family:var(--ff-head);
+  font-size:clamp(42px,9vw,110px);
+  color:#fff;line-height:.85;
+  margin:8px 0;opacity:0;
+}
+#s5 .cta-url{
+  font-family:var(--ff-mono);
+  font-size:clamp(12px,2.2vw,20px);
+  color:rgba(255,255,255,.7);
+  letter-spacing:2px;
+  margin-top:16px;opacity:0;
+}
+#s5 .cta-url span{color:#fff;font-weight:700;}
+#s5 .cta-btn{
+  margin-top:24px;
+  background:#fff;color:var(--red);
+  font-family:var(--ff-head);font-size:clamp(16px,2.8vw,28px);
+  letter-spacing:3px;
+  border:none;border-radius:4px;
+  padding:14px 40px;cursor:pointer;
+  opacity:0;
+  text-decoration:none;display:inline-block;
+  transition:transform .2s,box-shadow .2s;
+}
+#s5 .cta-btn:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(255,255,255,.3);}
+#s5 .cta-tagline{
+  margin-top:12px;
+  font-size:clamp(10px,1.5vw,13px);
+  color:rgba(255,255,255,.5);
+  font-family:var(--ff-mono);
+  letter-spacing:2px;opacity:0;
+}
+
+/* ─── PROGRESS BAR ─── */
+#prog-bar{
+  position:fixed;bottom:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--red),var(--red2));
+  width:0%;z-index:200;transition:width .1s linear;
+}
+
+/* ─── SCENE COUNTER ─── */
+#counter{
+  position:fixed;top:16px;right:16px;z-index:200;
+  font-family:var(--ff-mono);font-size:11px;color:#444;
+  letter-spacing:1px;
+}
+
+/* ─── FLASH TRANSITION ─── */
+#flash{
+  position:fixed;inset:0;background:#fff;
+  opacity:0;pointer-events:none;z-index:150;
+  transition:opacity .08s;
+}
+
+/* ─── RESTART ─── */
+#restart-btn{
+  position:fixed;bottom:16px;right:16px;z-index:200;
+  background:rgba(255,255,255,.08);border:1px solid #333;color:#666;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;
+  padding:6px 14px;border-radius:20px;cursor:pointer;
+  transition:all .2s;
+}
+#restart-btn:hover{background:rgba(255,45,45,.2);border-color:var(--red);color:#fff;}
+</style>
+</head>
+<body>
+
+<div id="ad">
+
+  <!-- SCENE 1: HOOK -->
+  <div class="scene active" id="s1">
+    <div class="grid-bg"></div>
+    <div class="scan-line"></div>
+    <div class="big-q" id="s1-q">YOUR LINK<br><span>SUCKS.</span></div>
+    <div class="sub1" id="s1-sub">until now →</div>
+  </div>
+
+  <!-- SCENE 2: PROBLEM VS SOLUTION -->
+  <div class="scene" id="s2">
+    <div class="pane" id="s2-left">
+      <div class="pane-label">Without AppOpener</div>
+      <div class="pane-icon" id="s2-icon1">😤</div>
+      <div class="pane-text bad" id="s2-t1">LINK<br>DROPS<br>TO<br>BROWSER</div>
+      <div class="pane-desc" id="s2-d1">Users land in a browser, lose context, bounce. Conversions die.</div>
+      <div class="x-mark" id="s2-x">✕</div>
+    </div>
+    <div class="vs-divider" id="s2-vs">VS</div>
+    <div class="pane" id="s2-right">
+      <div class="pane-label">With AppOpener</div>
+      <div class="pane-icon" id="s2-icon2">🚀</div>
+      <div class="pane-text" id="s2-t2" style="color:#fff;">OPENS<br>RIGHT<br>IN<br>THE APP</div>
+      <div class="pane-desc" id="s2-d2">One tap → directly inside YouTube, Instagram, Amazon & 100+ apps.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: PRODUCT DEMO -->
+  <div class="scene" id="s3">
+    <div class="demo-left">
+      <div class="product-badge" id="s3-badge"><span class="dot"></span>LIVE PRODUCT</div>
+      <div class="demo-headline" id="s3-hl">SMARTEN<br>YOUR<br><em>LINKS.</em></div>
+      <ul class="demo-features" id="s3-feats">
+        <li><span class="chk">✓</span>Deep links to 100+ apps instantly</li>
+        <li><span class="chk">✓</span>Smart PWA — zero install needed</li>
+        <li><span class="chk">✓</span>Real-time analytics & monitoring</li>
+        <li><span class="chk">✓</span>Creator economy ready</li>
+        <li><span class="chk">✓</span>Branded CDN subdomains</li>
+      </ul>
+    </div>
+    <div class="demo-right">
+      <div id="phone-mock">
+        <div class="notch"></div>
+        <div class="phone-screen">
+          <div class="p-url">
+            <span>🔗</span>
+            <span class="link-text">appopener.com/free/yt/...</span>
+          </div>
+          <div class="p-arrow">↓</div>
+          <div class="p-app">
+            <div class="app-icon" style="background:#ff0000;">▶</div>
+            <div>
+              <div class="app-name">Opening in YouTube</div>
+              <div class="app-sub">Direct deep link detected</div>
+            </div>
+          </div>
+          <div class="p-app">
+            <div class="app-icon" style="background:#e91e63;">📸</div>
+            <div>
+              <div class="app-name">Opens in Instagram</div>
+              <div class="app-sub">No browser redirect</div>
+            </div>
+          </div>
+          <div class="p-app">
+            <div class="app-icon" style="background:#ff6900;">🛒</div>
+            <div>
+              <div class="app-name">Opens in Amazon</div>
+              <div class="app-sub">Affiliate ready</div>
+            </div>
+          </div>
+          <div class="p-tag">✓ OPENED IN APP — 0.3s</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 4: LEADERBOARD VIDEO EMBED -->
+  <div class="scene" id="s4">
+    <div class="s4-top">
+      <div>
+        <div class="s4-eyebrow">Powered by AppOpener</div>
+        <div class="s4-headline">TOP 50 <span>TRENDING</span> LEADERBOARD</div>
+      </div>
+      <div class="s4-badge">LIVE ●</div>
+    </div>
+    <div class="embed-frame" id="s4-frame">
+      <div class="s4-overlay"></div>
+      <!-- Embedded leaderboard iframe -->
+      <iframe id="lb-iframe" src="about:blank" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- SCENE 5: CTA -->
+  <div class="scene" id="s5">
+    <div class="red-bg" id="s5-redbg"></div>
+    <div class="cta-content">
+      <div class="cta-logo" id="s5-logo">app<span>øpener</span></div>
+      <div class="cta-big" id="s5-big">SMARTEN<br>YOUR<br>LINKS.</div>
+      <div class="cta-url" id="s5-url"><span>appopener.com</span> — free to start</div>
+      <a class="cta-btn" id="s5-btn" href="https://www.appopener.com" target="_blank">TRY FOR FREE →</a>
+      <div class="cta-tagline" id="s5-tag">deep links · smart pwa · creator tools · analytics</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="prog-bar"></div>
+<div id="counter">0:00</div>
+<div id="flash"></div>
+<button id="restart-btn" onclick="restart()">↺ Replay</button>
+
+<script>
+// ─── LEADERBOARD HTML (injected into iframe) ───
+const lbHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0f;font-family:'DM Sans',system-ui,sans-serif;overflow:hidden;}
+@keyframes slideIn{from{transform:translateX(-40px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes barGrow{from{width:0}to{width:var(--bw)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
+#hd{background:linear-gradient(135deg,#ff0000,#cc0000);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+#logo{font-size:22px;font-weight:800;color:#fff;letter-spacing:-1px;}
+#logo span{background:#fff;color:#cc0000;border-radius:3px;padding:0 4px;}
+#live{background:#fff;color:#cc0000;font-size:9px;font-weight:700;border-radius:20px;padding:2px 8px;animation:shimmer 1.2s infinite;}
+#stage{padding:6px 12px;}
+.row{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:6px;margin-bottom:2px;opacity:0;}
+.rk{width:22px;font-size:10px;font-weight:700;text-align:center;flex-shrink:0;}
+.rk.g{color:#FFD700}.rk.s{color:#C0C0C0}.rk.b{color:#CD7F32}.rk.r{color:#555}
+.th{width:34px;height:22px;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;}
+.inf{flex:1;min-width:0;}
+.tt{font-size:10px;color:#e8e8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+.cn{font-size:8px;color:#666;margin-top:1px;}
+.st{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.bw{width:50px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.br{height:100%;border-radius:2px;background:linear-gradient(90deg,#ff4444,#ff8800);}
+.vw{font-size:9px;color:#aaa;}.vw b{color:#ff4444}
+.lk{font-size:9px;color:#aaa;}.lk b{color:#4fc3f7}
+#ft{background:rgba(255,0,0,.1);border-top:1px solid rgba(255,0,0,.2);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;}
+#cta{background:#ff0000;color:#fff;font-size:10px;font-weight:700;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;animation:pulse 2s infinite;}
+#cap{font-size:9px;color:#555;}
+#pb{position:fixed;bottom:0;left:0;height:2px;background:#ff0000;width:0%;transition:width .1s linear;}
+</style></head><body>
+<div id="hd"><div><div id="logo">You<span>Tube</span></div><div style="font-size:9px;color:rgba(255,255,255,.6);margin-top:2px;">Trending Leaderboard • Top 50</div></div><div id="live">● LIVE</div></div>
+<div id="stage"></div>
+<div id="ft"><span id="cap">Updated every minute · All categories</span><button id="cta">Watch Now ▶</button></div>
+<div id="pb"></div>
+<script>
+const vids=[
+  {t:"MrBeast: I Spent 100 Days Underground",ch:"MrBeast",v:"498M",l:"12.4M",c:"#f55"},
+  {t:"Taylor Swift - Fortnight (Official Video)",ch:"Taylor Swift",v:"412M",l:"9.8M",c:"#f8a"},
+  {t:"Sidhu Moosewala - Levels (Official Video)",ch:"Sidhu Moosewala",v:"389M",l:"11.2M",c:"#c7f"},
+  {t:"Cristiano Ronaldo Best Goals 2024",ch:"FIFA Official",v:"365M",l:"8.7M",c:"#4fc"},
+  {t:"Minecraft Movie Official Trailer",ch:"Warner Bros.",v:"342M",l:"7.6M",c:"#8ef"},
+  {t:"Eminem - Houdini (Official Video)",ch:"Eminem",v:"318M",l:"10.1M",c:"#f55"},
+  {t:"Virat Kohli: The Greatest Innings Ever",ch:"BCCI Official",v:"298M",l:"9.4M",c:"#4fc"},
+  {t:"Squid Game Season 2 - Official Trailer",ch:"Netflix",v:"276M",l:"8.3M",c:"#f84"},
+  {t:"Doja Cat - Agora Hills (Official Video)",ch:"Doja Cat",v:"264M",l:"6.9M",c:"#f8a"},
+  {t:"Neymar Jr vs Messi: Epic Skills Battle",ch:"LaLiga",v:"251M",l:"7.1M",c:"#4fc"},
+  {t:"GTA VI Official Gameplay Reveal",ch:"Rockstar Games",v:"248M",l:"14.2M",c:"#8ef"},
+  {t:"Shah Rukh Khan: Jawan Full Video Song",ch:"Red Chillies",v:"239M",l:"8.8M",c:"#c7f"},
+  {t:"Coldplay x BTS - My Universe Live",ch:"Coldplay",v:"231M",l:"6.4M",c:"#4fc"},
+  {t:"The Rock vs. John Cena Final Showdown",ch:"WWE",v:"224M",l:"7.2M",c:"#f84"},
+  {t:"World Largest Gummy Bear Challenge",ch:"MrBeast",v:"218M",l:"5.9M",c:"#f55"},
+  {t:"Ariana Grande - We Can't Be Friends",ch:"Republic Records",v:"212M",l:"7.7M",c:"#f8a"},
+  {t:"Olympics 2024 Highlights Compilation",ch:"Olympics",v:"206M",l:"5.2M",c:"#fa0"},
+  {t:"Elon Musk Interview: The Future of AI",ch:"Lex Fridman",v:"199M",l:"6.1M",c:"#8ef"},
+  {t:"Bollywood Most Epic Dance Mashup 2024",ch:"T-Series",v:"194M",l:"5.8M",c:"#c7f"},
+  {t:"Minecraft: The Movie - First 10 Minutes",ch:"Warner Bros.",v:"188M",l:"4.9M",c:"#8ef"},
+  {t:"Top 50 NBA Moments of the Season",ch:"NBA Official",v:"183M",l:"4.6M",c:"#f84"},
+  {t:"Billie Eilish - Birds of a Feather Live",ch:"Billie Eilish",v:"177M",l:"5.4M",c:"#4fc"},
+  {t:"BLACKPINK World Tour Opening Night",ch:"YG Entertainment",v:"172M",l:"8.3M",c:"#f8a"},
+  {t:"Ranveer Singh: Ram Setu Epic Scene",ch:"Dharma Prod.",v:"169M",l:"4.3M",c:"#c7f"},
+  {t:"The Weeknd - Dancing in the Flames",ch:"XO / Republic",v:"165M",l:"4.8M",c:"#f84"},
+  {t:"Formula 1 2024: Best Overtakes Ever",ch:"Formula 1",v:"162M",l:"4.1M",c:"#f55"},
+  {t:"Olivia Rodrigo - Vampire Live at Grammys",ch:"Geffen Records",v:"158M",l:"5.6M",c:"#f8a"},
+  {t:"PM Modi Speech: India at 2047 Vision",ch:"BJP Official",v:"155M",l:"3.8M",c:"#fa0"},
+  {t:"PewDiePie 10 Year YouTube Anniversary",ch:"PewDiePie",v:"151M",l:"7.2M",c:"#f55"},
+  {t:"BTS Permission to Dance Final Concert",ch:"HYBE Labels",v:"148M",l:"9.1M",c:"#4fc"},
+  {t:"One Piece Live Action Season 2 Trailer",ch:"Netflix",v:"145M",l:"6.3M",c:"#f84"},
+  {t:"Federer vs Djokovic: Wimbledon Classic",ch:"Wimbledon",v:"142M",l:"3.7M",c:"#8ef"},
+  {t:"Diljit Dosanjh: Born to Shine Concert",ch:"Diljit Dosanjh",v:"139M",l:"4.2M",c:"#c7f"},
+  {t:"Science of Black Holes Explained",ch:"Kurzgesagt",v:"136M",l:"5.1M",c:"#8ef"},
+  {t:"SpaceX Starship Launch Full Coverage",ch:"SpaceX",v:"134M",l:"4.0M",c:"#fa0"},
+  {t:"Drake - Nokia (Official Video)",ch:"OVO Sound",v:"131M",l:"3.9M",c:"#f55"},
+  {t:"Lionel Messi: Inter Miami Goals Reel",ch:"Inter Miami CF",v:"128M",l:"5.7M",c:"#4fc"},
+  {t:"Ryan Reynolds Funniest Interviews 2024",ch:"Fans United",v:"126M",l:"3.6M",c:"#f84"},
+  {t:"Arijit Singh Live: Mumbai Concert 2024",ch:"Sony Music India",v:"124M",l:"4.4M",c:"#c7f"},
+  {t:"Apple Vision Pro: 6 Month Review",ch:"MKBHD",v:"121M",l:"3.5M",c:"#8ef"},
+  {t:"MS Dhoni Last Match Tribute Compilation",ch:"Star Sports",v:"119M",l:"5.9M",c:"#fa0"},
+  {t:"World Record: Highest Skydive Ever",ch:"Red Bull",v:"116M",l:"3.4M",c:"#f55"},
+  {t:"Gordon Ramsay Reacts to Indian Street Food",ch:"Gordon Ramsay",v:"114M",l:"4.7M",c:"#f84"},
+  {t:"Jungkook - Standing Next to You Live",ch:"HYBE Labels",v:"112M",l:"6.8M",c:"#4fc"},
+  {t:"Tesla Robotaxi Full Walkthrough",ch:"Tesla",v:"110M",l:"3.3M",c:"#fa0"},
+  {t:"Kylie Jenner: 24 Hours in Paris",ch:"Kylie Jenner",v:"108M",l:"3.1M",c:"#f8a"},
+  {t:"KL Rahul vs Pakistan: Match Winning Innings",ch:"ICC Cricket",v:"106M",l:"4.5M",c:"#4fc"},
+  {t:"Avatar 3: First Official Teaser",ch:"20th Century",v:"104M",l:"5.0M",c:"#8ef"},
+  {t:"Post Malone - Most Wanted (Official MV)",ch:"Republic Records",v:"102M",l:"3.0M",c:"#f84"},
+  {t:"WrestleMania 40: Cody Rhodes Big Moment",ch:"WWE",v:"100M",l:"6.2M",c:"#f55"},
+];
+const PAGE=8,TOTAL=30000;
+const maxV=498;
+let p=0,pages=Math.ceil(vids.length/PAGE),st;
+function nv(s){return parseFloat(s);}
+function show(pg){
+  const stage=document.getElementById('stage');
+  stage.innerHTML='';
+  const s=pg*PAGE,e=Math.min(s+PAGE,vids.length);
+  for(let i=s;i<e;i++){
+    const v=vids[i];
+    const pct=(nv(v.v)/maxV*100).toFixed(1);
+    const rc=i===0?'g':i===1?'s':i===2?'b':'r';
+    const lbl=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+    const row=document.createElement('div');
+    row.className='row';
+    row.innerHTML = '<div class="rk ' + rc + '">' + lbl + '</div><div class="th" style="background:' + v.c + '22;color:' + v.c + ';border:1px solid ' + v.c + '44;">' + v.ch.slice(0,2).toUpperCase() + '</div><div class="inf"><div class="tt">' + v.t + '</div><div class="cn">' + v.ch + '</div></div><div class="st"><div class="bw"><div class="br" style="--bw:' + pct + '%;width:0;"></div></div><div class="vw">👁 <b>' + v.v + '</b></div><div class="lk">👍 <b>' + v.l + '</b></div></div>';
+    stage.appendChild(row);
+    setTimeout(()=>{
+      row.style.animation='slideIn .3s ease forwards';
+      row.style.opacity='1';
+      const bar=row.querySelector('.br');
+      if(bar) bar.style.animation='barGrow .4s ease forwards';
+    },(i-s)*55);
+  }
+}
+function tick(){
+  const el=Date.now()-st;
+  const pct=Math.min(el/TOTAL*100,100);
+  document.getElementById('pb').style.width=pct+'%';
+  if(el<TOTAL) requestAnimationFrame(tick);
+}
+function start(){
+  st=Date.now();
+  requestAnimationFrame(tick);
+  show(0);
+  const iv=TOTAL/pages;
+  const t=setInterval(()=>{
+    p++;
+    if(p>=pages){p=0;}
+    show(p);
+  },iv);
+}
+start();
+<\/script></body></html>`;
+
+// ─── TIMELINE (ms) ───
+// S1: 0–5000
+// S2: 5000–11000
+// S3: 11000–19000
+// S4: 19000–26000
+// S5: 26000–31000
+const TOTAL = 31000;
+const scenes = [
+  {id:'s1', start:0,    end:5000},
+  {id:'s2', start:5000, end:11000},
+  {id:'s3', start:11000,end:19000},
+  {id:'s4', start:19000,end:26000},
+  {id:'s5', start:26000,end:31000},
+];
+
+let startTime = null;
+let raf;
+let lbLoaded = false;
+
+function flash(cb){
+  const f=document.getElementById('flash');
+  f.style.opacity='.7';
+  setTimeout(()=>{f.style.opacity='0';if(cb)cb();},80);
+}
+
+// ─── SCENE 1 ANIMATIONS ───
+function animS1(){
+  const q=document.getElementById('s1-q');
+  const sub=document.getElementById('s1-sub');
+  q.style.animation='popIn .6s .3s ease forwards';
+  setTimeout(()=>{ sub.style.animation='fadeUp .5s ease forwards'; },1100);
+}
+
+// ─── SCENE 2 ANIMATIONS ───
+function animS2(){
+  const els=[
+    ['s2-icon1',200],['s2-t1',350],['s2-d1',550],
+    ['s2-x',400],['s2-vs',700],
+    ['s2-icon2',900],['s2-t2',1050],['s2-d2',1250],
+  ];
+  els.forEach(([id,delay])=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el) el.style.animation='fadeUp .4s ease forwards';
+    },delay);
+  });
+}
+
+// ─── SCENE 3 ANIMATIONS ───
+function animS3(){
+  setTimeout(()=>{ document.getElementById('s3-badge').style.animation='fadeUp .4s ease forwards'; },100);
+  setTimeout(()=>{ document.getElementById('s3-hl').style.animation='popIn .5s ease forwards'; },300);
+  setTimeout(()=>{ document.getElementById('s3-feats').style.animation='fadeUp .5s ease forwards'; },700);
+  setTimeout(()=>{
+    const ph=document.getElementById('phone-mock');
+    ph.style.animation='fadeUp .6s ease forwards';
+    ph.style.opacity='0';
+  },500);
+}
+
+// ─── SCENE 4: load leaderboard iframe ───
+function loadLB(){
+  if(lbLoaded) return;
+  lbLoaded = true;
+  const iframe = document.getElementById('lb-iframe');
+  const blob = new Blob([lbHTML], {type:'text/html'});
+  iframe.src = URL.createObjectURL(blob);
+}
+
+// ─── SCENE 5 ANIMATIONS ───
+function animS5(){
+  const bg=document.getElementById('s5-redbg');
+  bg.style.transition='transform .6s cubic-bezier(.16,1,.3,1)';
+  bg.style.transform='scaleY(1)';
+  const items=[
+    ['s5-logo',500],['s5-big',700],['s5-url',1100],
+    ['s5-btn',1300],['s5-tag',1600],
+  ];
+  items.forEach(([id,delay])=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el) el.style.animation='fadeUp .5s ease forwards';
+    },delay);
+  });
+}
+
+// ─── MAIN LOOP ───
+let prevScene = null;
+const sceneFns = { s1:animS1, s2:animS2, s3:animS3, s4:loadLB, s5:animS5 };
+
+function update(){
+  const elapsed = Date.now() - startTime;
+  const pct = Math.min(elapsed/TOTAL*100,100);
+  document.getElementById('prog-bar').style.width = pct+'%';
+
+  // timer
+  const sec = Math.floor(elapsed/1000);
+  const ms = Math.floor((elapsed%1000)/10);
+  document.getElementById('counter').textContent =
+    `0:${String(sec).padStart(2,'0')}.${String(ms).padStart(2,'0')}`;
+
+  // find active scene
+  let active = null;
+  for(const s of scenes){
+    if(elapsed >= s.start && elapsed < s.end){ active = s.id; break; }
+  }
+  if(!active) active = scenes[scenes.length-1].id;
+
+  if(active !== prevScene){
+    // switch scene
+    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    document.getElementById(active).classList.add('active');
+    flash();
+    if(sceneFns[active]) sceneFns[active]();
+    prevScene = active;
+  }
+
+  if(elapsed < TOTAL){
+    raf = requestAnimationFrame(update);
+  } else {
+    document.getElementById('counter').textContent = '0:30.00';
+  }
+}
+
+function restart(){
+  cancelAnimationFrame(raf);
+  lbLoaded = false;
+  prevScene = null;
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  // reset anims
+  ['s1-q','s1-sub','s2-icon1','s2-t1','s2-d1','s2-x','s2-vs','s2-icon2','s2-t2','s2-d2',
+   's3-badge','s3-hl','s3-feats','s5-logo','s5-big','s5-url','s5-btn','s5-tag',
+   'phone-mock'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.animation='none';el.style.opacity='0';}
+  });
+  document.getElementById('s5-redbg').style.transform='scaleY(0)';
+  document.getElementById('lb-iframe').src='about:blank';
+  document.getElementById('prog-bar').style.width='0%';
+  document.getElementById('s1').classList.add('active');
+  // re-trigger s1 grid
+  const grid=document.querySelector('.grid-bg');
+  if(grid){grid.style.animation='none';void grid.offsetWidth;grid.style.animation='gridFade 1s .3s forwards';}
+  const scan=document.querySelector('.scan-line');
+  if(scan){scan.style.animation='none';void scan.offsetWidth;scan.style.animation='scanDown 1.2s ease-in-out forwards';}
+  setTimeout(()=>{
+    startTime = Date.now();
+    prevScene = 's1';
+    animS1();
+    raf = requestAnimationFrame(update);
+  },100);
+}
+
+// ─── KICK OFF ───
+window.addEventListener('load',()=>{
+  startTime = Date.now();
+  prevScene = 's1';
+  animS1();
+  raf = requestAnimationFrame(update);
+});
+</script>
+</body>
+</html>
