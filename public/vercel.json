@@ -1,0 +1,21 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/ad.html",
+      "destination": "/ad.html"
+    },
+    {
+      "source": "/ad/index.html",
+      "destination": "/ad/index.html"
+    },
+    {
+      "source": "/ad",
+      "destination": "/ad/index.html"
+    },
+    {
+      "source": "/((?!api|static|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

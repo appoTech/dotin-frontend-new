@@ -1164,7 +1164,7 @@ class Splash extends Component {
     <div className="ad-overlay">
       <div className="ad-iframe-container">
         <button className="ad-close-btn" onClick={() => this.setState({ showAdOverlay: false })}>✕ Close</button>
-        <iframe src="/ad.html" style={{ width: '100%', height: '100%', border: 'none' }} title="AppOpener Presentation" />
+        <iframe src="/ad.html?v=2" style={{ width: '100%', height: '100%', border: 'none' }} title="AppOpener Presentation" />
       </div>
     </div>
   )}
