@@ -3,6 +3,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { getURLandredirect, recordClick } from "../helper/api";
 import "../css/splash.css";
+import axios from "axios";
 import Avatar from '@mui/material/Avatar';
 /* import CREATORS from "../assets/file.png"; */
 /* import youtube from "../assets/youtube.svg"; */
@@ -43,6 +44,41 @@ import ShareTray from "../components/ShareTray";
 // import avatarframe from "../assets/avatarframe.png";
 import avatarframe from "../assets/frame01.png"
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001/";
+
+const loadCashfreeSDK = () => {
+  return new Promise((resolve, reject) => {
+    if (window.Cashfree) {
+      resolve(window.Cashfree);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+    script.onload = () => resolve(window.Cashfree);
+    script.onerror = () => reject(new Error("Failed to load Cashfree SDK"));
+    document.head.appendChild(script);
+  });
+};
+
+const getYoutubeEmbedUrl = (url) => {
+  if (!url) return "";
+  let videoId = "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length === 11) {
+    videoId = match[2];
+  } else {
+    const shortsReg = /\/shorts\/([a-zA-Z0-9_-]{11})/;
+    const shortsMatch = url.match(shortsReg);
+    if (shortsMatch) {
+      videoId = shortsMatch[1];
+    }
+  }
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=1&playlist=${videoId}`;
+  }
+  return url;
+};
 
 class Splash extends Component {
   constructor(props) {
@@ -74,7 +110,21 @@ class Splash extends Component {
       image: poster1,
     },
   ],
-      shareTrayOpen: false
+      shareTrayOpen: false,
+      spotlightVideos: [],
+      currentSpotlightIndex: 0,
+      showVipModal: false,
+      vipForm: {
+        name: "",
+        email: "",
+        mobile: "",
+        ytLink: ""
+      },
+      vipSubmitting: false,
+      vipStep: "form",
+      vipOrderId: "",
+      vipResult: null,
+      showAdOverlay: false
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
@@ -88,7 +138,13 @@ class Splash extends Component {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
     recordClick(apptag, shortstring, 'iframe_overlay');
-    window.location.assign("https://youtu.be/7OjqvqB0jE4");
+    
+    const { spotlightVideos, currentSpotlightIndex } = this.state;
+    if (spotlightVideos && spotlightVideos.length > 0) {
+      window.open(spotlightVideos[currentSpotlightIndex].ytvideoLink, "_blank");
+    } else {
+      window.location.assign("https://youtu.be/njHZ40CLIjA");
+    }
   }
 
   stopRedirecting() {
@@ -104,47 +160,71 @@ class Splash extends Component {
   
  
 
+  fetchSpotlightVideos = () => {
+    return axios.get(`${API_URL}payment/spotlight/active`)
+      .then(res => {
+        const videos = res.data.videos || [];
+        this.setState({ spotlightVideos: videos, currentSpotlightIndex: 0 });
+        
+        if (this.spotlightRotationInterval) clearInterval(this.spotlightRotationInterval);
+        if (videos.length > 1) {
+          this.spotlightRotationInterval = setInterval(() => {
+            this.setState(prevState => ({
+              currentSpotlightIndex: (prevState.currentSpotlightIndex + 1) % videos.length
+            }));
+          }, 7000);
+        }
+        return videos;
+      })
+      .catch(err => {
+        console.error("Failed to fetch spotlight videos", err);
+        return [];
+      });
+  };
+
   componentDidMount() {
     let apptag = this.props.match.params.apptype;
     let shortstring = this.props.match.params.shorturl;
-    getURLandredirect(apptag, shortstring).then((res) => {
+    
+    Promise.all([
+      getURLandredirect(apptag, shortstring),
+      this.fetchSpotlightVideos()
+    ]).then(([res, videos]) => {
       console.log("this is res: ",res);
       this.setState({ intentvalue: res.data.smartUrl.data.app_intend });
       this.setState({ original_url: res.data.smartUrl.data.originalURL });
       this.setState({ ostype: res.data.smartUrl.data.os_type });
+      
+      const countdownTime = videos.length > 0 ? videos.length * 7 : 4;
+      this.setState({ countdown: countdownTime });
+
       const newPromotes = Array.isArray(
             res?.data?.weeklyPromotes?.data.data
           )
             ? res.data.weeklyPromotes.data.data.reverse()
             : [];
       console.log("New Promotes from API: ", newPromotes);
-      console.log(res?.data?.weeklyPromotes.data.data);
       this.setState((prevState) => ({
         promotes: [...newPromotes,...prevState.promotes]
       }));
-      this.setState({ytavatar: res.data.ytChannelDetails.data.avatar})
+      this.setState({ytavatar: res.data.ytChannelDetails?.data?.avatar || ""})
 
-      console.log(res.data.ytChannelDetails.data.avatar)
       let app_intend = this.state.intentvalue;
       let originalURL = this.state.original_url;
 
-      const click_link = document.getElementById("abcd");
-      console.log("this is app_intend: ",app_intend);
       if (app_intend === "Desktop" || app_intend === "Mobile") {
         app_intend = originalURL;
-        /* console.log(app_intend) */
       }
-      let countdownInterval = setInterval(() => {
-        this.setState((prevState) => ({
-          countdown: prevState.countdown - 1,
-        }));
-
-        
-        if (this.state.countdown === 0) {
-          clearInterval(countdownInterval); 
-          this.setState({ showRedirectText: false }); 
-          this.handleRedirect(); 
-        }
+      
+      this.countdownInterval = setInterval(() => {
+        this.setState((prevState) => {
+          if (prevState.countdown <= 1) {
+            clearInterval(this.countdownInterval);
+            this.handleRedirect();
+            return { countdown: 0, showRedirectText: false };
+          }
+          return { countdown: prevState.countdown - 1 };
+        });
       }, 1000); 
     });
 
@@ -157,7 +237,132 @@ class Splash extends Component {
 
   componentWillUnmount() {
     if (this.promoteInterval) clearInterval(this.promoteInterval);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    if (this.spotlightRotationInterval) clearInterval(this.spotlightRotationInterval);
+    if (this.pollTimer) clearTimeout(this.pollTimer);
   }
+
+  openVipModal = () => {
+    this.setState({
+      showVipModal: true,
+      vipStep: "form",
+      vipForm: { name: "", email: "", mobile: "", ytLink: "" },
+      vipResult: null,
+      vipSubmitting: false
+    });
+  };
+
+  closeVipModal = () => {
+    this.setState({ showVipModal: false });
+  };
+
+  handleVipChange = (e) => {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      vipForm: { ...prevState.vipForm, [name]: value }
+    }));
+  };
+
+  handleVipSubmit = async (e) => {
+    e.preventDefault();
+    this.setState({ vipSubmitting: true, vipResult: null });
+
+    const { name, email, mobile, ytLink } = this.state.vipForm;
+
+    try {
+      const { data } = await axios.post(`${API_URL}payment/createOrder`, {
+        customer_name: name,
+        customer_email: email,
+        customer_phone: mobile,
+        amount: 20000,
+        OrderType: "vip_spotlight",
+        promotion_data: {
+          title: "VIP Spotlight",
+          linkUrl: ytLink,
+          imageUrl: null,
+        },
+      });
+
+      if (!data.success || !data.payment_session_id) {
+        throw new Error("Failed to create VIP order");
+      }
+
+      this.setState({
+        vipOrderId: data.order_id,
+        vipStep: "paying"
+      });
+
+      const Cashfree = await loadCashfreeSDK();
+      const cashfree = Cashfree({ mode: "sandbox" });
+
+      cashfree
+        .checkout({
+          paymentSessionId: data.payment_session_id,
+          redirectTarget: "_modal",
+        })
+        .then(() => {
+          this.pollVipPaymentStatus(data.order_id);
+        });
+    } catch (error) {
+      console.error("VIP Payment Error:", error);
+      this.setState({
+        vipStep: "form",
+        vipSubmitting: false,
+        vipResult: {
+          success: false,
+          message: error?.response?.data?.error || error.message || "Payment failed",
+        }
+      });
+    }
+  };
+
+  pollVipPaymentStatus = (orderIdToPoll) => {
+    let pollCount = 0;
+    const MAX_POLLS = 15;
+    const POLL_INTERVAL = 3000;
+
+    const poll = async () => {
+      pollCount++;
+
+      try {
+        const { data } = await axios.get(
+          `${API_URL}payment/verify/${orderIdToPoll}`
+        );
+
+        if (data.order_status === "PAID") {
+          this.setState({
+            vipStep: "success",
+            vipSubmitting: false,
+            vipResult: { success: true, message: "VIP Payment successful & Spotlight Video is live! 🎉" }
+          });
+          this.fetchSpotlightVideos();
+          return;
+        }
+
+        if (data.order_status === "EXPIRED" || data.order_status === "TERMINATED") {
+          this.setState({
+            vipStep: "form",
+            vipSubmitting: false,
+            vipResult: { success: false, message: "Payment failed or expired. Please try again." }
+          });
+          return;
+        }
+
+        if (pollCount < MAX_POLLS) {
+          this.pollTimer = setTimeout(poll, POLL_INTERVAL);
+        } else {
+          this.setState({
+            vipStep: "pending",
+            vipSubmitting: false
+          });
+        }
+      } catch (error) {
+        console.error("Verification poll error:", error);
+      }
+    };
+
+    poll();
+  };
 
   openPopup = (state, type) => {
     console.log("Type is : ", type);
@@ -400,33 +605,34 @@ class Splash extends Component {
           <div className='latest-link-img  '>
             <div className="iframe-container">
               <iframe className="vid"
-              /* width="100%"
-              height="auto" */
-       
-       src="https://www.youtube.com/embed/7OjqvqB0jE4?autoplay=1&loop=1&mute=1"
-       title="HOLI TRIP | When Life gives you LEMONS, 'Kaat ke Chaat Lo' | Shiv Trance Holi Vlog"
-       frameBorder="0"
-       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-       referrerPolicy="strict-origin-when-cross-origin"
-       allowFullScreen
-     ></iframe>
+                src={
+                  this.state.spotlightVideos && this.state.spotlightVideos.length > 0
+                    ? getYoutubeEmbedUrl(this.state.spotlightVideos[this.state.currentSpotlightIndex].ytvideoLink)
+                    : "https://www.youtube.com/embed/njHZ40CLIjA?autoplay=1&loop=1&mute=1"
+                }
+                title={
+                  this.state.spotlightVideos && this.state.spotlightVideos.length > 0
+                    ? `Spotlight: ${this.state.spotlightVideos[this.state.currentSpotlightIndex].name}'s Video`
+                    : "AppOpener Intro"
+                }
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+              {this.state.spotlightVideos && this.state.spotlightVideos.length > 0 && (
+                <div className="iframe-spotlight-tag">SPOTLIGHT ⚡</div>
+              )}
               <div className="iframe-overlay" onClick={this.handleOverlayClick}></div>
             </div>
-           {/*  <img src={video1} alt="Video thumbnail"></img> */}
-{/*             <div className="glass-effect">
-  <p className='text-sm font-bold text-white'>AppOpener</p>
-</div> */}
-            {/* <button>
-              <MdOutlineIosShare color='white' size='11px'/>
-            </button>  */}
 
-<div className='video-info flex'>
-    <img className='channel-logo' src={creatoryt} alt='Channel Logo' />
-    <div className='video-details'>
-      <h4 className='video-title'>Monetise and Analyse with AppOpener</h4>
-      <p className='channel-name'>CreatorCosmos</p>
-    </div>
-  </div>
+            <div className='video-info flex'>
+              <img className='channel-logo' src={creatoryt} alt='Channel Logo' />
+              <div className='video-details'>
+                <h4 className='video-title'>Monetise and Analyse with AppOpener</h4>
+                <p className='channel-name'>CreatorCosmos</p>
+              </div>
+            </div>
 
 
           </div>
@@ -521,7 +727,7 @@ class Splash extends Component {
       </div>
 <div
       className="splash-share-btn"
-      onClick={() => this.onOpenShareTray()}
+      onClick={() => this.setState({ showAdOverlay: true })}
     >
       <div className="splash-share-inner">
         <img
@@ -544,6 +750,23 @@ class Splash extends Component {
   }}
 >
   {/* HEADER */}
+
+  {/* SPOTLIGHT SECTION */}
+  <div className="spotlight-container">
+    <div className="spotlight-badge">SPOTLIGHT ZONE ⚡</div>
+    <p className="spotlight-description">
+      Get your YouTube Video featured in the spotlight! Millions of views & impressions guaranteed.
+    </p>
+    <div className="spotlight-buttons">
+      <button className="spotlight-btn-vip" onClick={this.openVipModal}>
+        👑 VIP Spotlight (₹20,000)
+      </button>
+      <button className="spotlight-btn-audition" onClick={() => openPopup(state, "promote")}>
+        🚀 Audition (Promote it)
+      </button>
+    </div>
+  </div>
+
   <div
     style={{
       display: "flex",
@@ -825,6 +1048,125 @@ class Splash extends Component {
     setButtonText={(text) => console.log(text)} 
   />
   <PipIframe src={"https://www.instagram.com/reel/DYrsaGER61u/?igsh=dGw4cGJoYXl4cWhm"} />
+
+  {this.state.showVipModal && (
+    <div className="vip-modal-overlay">
+      <div className="vip-modal-card">
+        <button className="vip-modal-close" onClick={this.closeVipModal}>✕</button>
+        
+        {this.state.vipStep === "form" && (
+          <form onSubmit={this.handleVipSubmit} className="vip-modal-form">
+            <h2 className="vip-modal-heading">👑 VIP Spotlight Feature</h2>
+            <p className="vip-modal-subheading">Feature your video on our splash page for 25 hours.</p>
+            
+            <div className="vip-form-group">
+              <label className="vip-label">Your Name <span className="required">*</span></label>
+              <input
+                className="vip-input"
+                type="text"
+                name="name"
+                value={this.state.vipForm.name}
+                onChange={this.handleVipChange}
+                required
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div className="vip-form-group">
+              <label className="vip-label">Mobile Number <span className="required">*</span></label>
+              <input
+                className="vip-input"
+                type="tel"
+                name="mobile"
+                value={this.state.vipForm.mobile}
+                onChange={this.handleVipChange}
+                required
+                pattern="[0-9]{10}"
+                title="Enter a valid 10-digit phone number"
+                placeholder="e.g. 9876543210"
+              />
+            </div>
+
+            <div className="vip-form-group">
+              <label className="vip-label">Email Address <span className="required">*</span></label>
+              <input
+                className="vip-input"
+                type="email"
+                name="email"
+                value={this.state.vipForm.email}
+                onChange={this.handleVipChange}
+                required
+                placeholder="e.g. name@example.com"
+              />
+            </div>
+
+            <div className="vip-form-group">
+              <label className="vip-label">YouTube Video URL <span className="required">*</span></label>
+              <input
+                className="vip-input"
+                type="url"
+                name="ytLink"
+                value={this.state.vipForm.ytLink}
+                onChange={this.handleVipChange}
+                required
+                placeholder="e.g. https://www.youtube.com/watch?v=..."
+              />
+            </div>
+
+            <div className="vip-modal-fee-box">
+              <span className="vip-fee-label">VIP Spotlight Fee</span>
+              <strong className="vip-fee-value">₹20,000</strong>
+            </div>
+
+            {this.state.vipResult && !this.state.vipResult.success && (
+              <div className="vip-alert vip-alert-error">
+                {this.state.vipResult.message}
+              </div>
+            )}
+
+            <button type="submit" disabled={this.state.vipSubmitting} className="vip-btn-submit">
+              {this.state.vipSubmitting ? "Processing..." : "Pay ₹20,000 & Feature Video"}
+            </button>
+          </form>
+        )}
+
+        {this.state.vipStep === "paying" && (
+          <div className="vip-modal-status">
+            <div className="vip-spinner" />
+            <h3>Processing VIP Payment...</h3>
+            <p>Please complete checkout in the payment window.</p>
+          </div>
+        )}
+
+        {this.state.vipStep === "success" && (
+          <div className="vip-modal-status">
+            <div className="vip-success-icon">🎉</div>
+            <h3>VIP Spotlight Active!</h3>
+            <p>{this.state.vipResult?.message || "Your video is now featured in the spotlight zone."}</p>
+            <button type="button" onClick={this.closeVipModal} className="vip-btn-submit">Done</button>
+          </div>
+        )}
+
+        {this.state.vipStep === "pending" && (
+          <div className="vip-modal-status">
+            <div className="vip-pending-icon">⏳</div>
+            <h3>Payment Verification Pending</h3>
+            <p>Your payment is still being processed. It will be verified shortly.</p>
+            <button type="button" onClick={this.closeVipModal} className="vip-btn-submit">Close</button>
+          </div>
+        )}
+      </div>
+    </div>
+  )}
+
+  {this.state.showAdOverlay && (
+    <div className="ad-overlay">
+      <div className="ad-iframe-container">
+        <button className="ad-close-btn" onClick={() => this.setState({ showAdOverlay: false })}>✕ Close</button>
+        <iframe src="/ad.html" style={{ width: '100%', height: '100%', border: 'none' }} title="AppOpener Presentation" />
+      </div>
+    </div>
+  )}
   </>
 
     );
