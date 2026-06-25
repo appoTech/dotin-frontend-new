@@ -327,6 +327,102 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
 
 
+/* =========================================
+   LIVE VIEWER COUNT BADGE
+   ========================================= */
+
+.viewcount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.viewbutton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px 10px 14px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: 'Inter', 'Nerko One', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: default;
+  user-select: none;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  animation: viewer-fadein 0.5s ease both;
+  transition: transform 0.2s ease;
+}
+
+.viewbutton:hover {
+  transform: scale(1.04);
+}
+
+@keyframes viewer-fadein {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.greendot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%   { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0.7); }
+  60%  { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);   }
+  100% { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0);   }
+}
+
+/* Rolling number digits */
+.rolling-number {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.rolling-digit-wrap {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.1em;
+  vertical-align: bottom;
+  line-height: 1.1em;
+}
+
+.rolling-digit {
+  display: inline-block;
+  animation: roll-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes roll-in {
+  0%   { transform: translateY(110%); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+.rolling-sep {
+  display: inline-block;
+}
+
+.rolling-label {
+  margin-left: 1px;
+}
+
+/* =========================================
+   END LIVE VIEWER COUNT BADGE
+   ========================================= */
+
 .cancel {
   width: auto; /* Adjust width as per the icon size */
 
@@ -338,13 +434,13 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
 .cancel button {
   color: white;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 24px;
   border-radius: 5px;
   background-color: black;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  padding: 6px; 
+  padding: 15px 15px 15px 15px; 
 /*   border-radius: 50%;  */
 
 }
@@ -907,3 +1003,260 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   background: rgba(239, 68, 68, 0.2);
   border-color: #ef4444;
 }
+
+
+/* =========================================
+   AUDITION MODAL
+   ========================================= */
+
+.audition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: audition-fadein 0.25s ease both;
+}
+
+@keyframes audition-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.audition-card {
+  position: relative;
+  background: linear-gradient(160deg, #0f0f1a 0%, #12121f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(139, 92, 246, 0.15);
+  animation: audition-slidein 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+@keyframes audition-slidein {
+  from { transform: translateY(28px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)     scale(1);    opacity: 1; }
+}
+
+.audition-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  line-height: 1;
+}
+
+.audition-close:hover {
+  background: rgba(255, 80, 80, 0.25);
+  color: #fff;
+}
+
+/* ── Header ── */
+.audition-header {
+  margin-bottom: 22px;
+}
+
+.audition-badge {
+  display: inline-block;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.audition-title {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+
+.audition-subtitle {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Form ── */
+.audition-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.audition-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.audition-field label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.audition-field input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.audition-field input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.audition-field input:focus {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+}
+
+/* ── Video Preview ── */
+.audition-preview {
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0a0a14;
+  animation: audition-fadein 0.3s ease both;
+}
+
+.audition-preview-iframe,
+.audition-preview-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+.audition-preview-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  color: #a78bfa;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.audition-preview-link:hover {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.audition-preview-link-url {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.audition-preview-link-arrow {
+  color: #7c3aed;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Submit button ── */
+.audition-submit-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-top: 4px;
+}
+
+.audition-submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.audition-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Success screen ── */
+.audition-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0 8px;
+  gap: 12px;
+}
+
+.audition-success-icon {
+  font-size: 56px;
+  animation: audition-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes audition-pop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.audition-success h2 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.audition-success p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+/* =========================================
+   END AUDITION MODAL
+   ========================================= */

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { getURLandredirect, recordClick } from "../helper/api";
 import "../css/splash.css";
@@ -81,6 +81,33 @@ const getYoutubeEmbedUrl = (url) => {
   return url;
 };
 
+const RollingCounter = ({ value, duration = 1000 }) => {
+  const [count, setCount] = useState(1);
+
+  useEffect(() => {
+    let start = value - 1000;
+    const end = value;
+
+    if (start === end) return;
+
+    const incrementTime = Math.floor(duration / (end - start));
+    let current = start;
+
+    const timer = setInterval(() => {
+      current += 3;
+      setCount(current);
+
+      if (current >= end) {
+        clearInterval(timer);
+      }
+    }, incrementTime);
+
+    return () => clearInterval(timer);
+  }, [value, duration]);
+
+  return <span className="font-bold">{count}</span>;
+};
+
 class Splash extends Component {
   constructor(props) {
     super(props);
@@ -94,6 +121,7 @@ class Splash extends Component {
       showShareOptions: false,
       currentIndex: 0,
       ytavatar: "",
+      visitorcount: 0,
       promotes: [
     {
       title: "PROMOTE YOUR SPACE",
@@ -126,7 +154,12 @@ class Splash extends Component {
       vipOrderId: "",
       vipResult: null,
       showAdOverlay: false,
-      adHtml: null
+      adHtml: null,
+      showAuditionModal: false,
+      auditionForm: { name: "", creatorId: "", email: "", videoLink: "" },
+      auditionVideoEmbed: null,
+      auditionSubmitting: false,
+      auditionDone: false
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
@@ -135,6 +168,45 @@ class Splash extends Component {
   onOpenShareTray = () => {
     this.setState({ shareTrayOpen: true });
   }
+
+  openAuditionModal = () => {
+    this.setState({ showAuditionModal: true, auditionDone: false, auditionForm: { name: "", creatorId: "", email: "", videoLink: "" }, auditionVideoEmbed: null });
+  };
+
+  closeAuditionModal = () => {
+    this.setState({ showAuditionModal: false });
+  };
+
+  handleAuditionField = (field, value) => {
+    this.setState(prev => ({
+      auditionForm: { ...prev.auditionForm, [field]: value },
+      ...(field === 'videoLink' ? { auditionVideoEmbed: this.resolveVideoEmbed(value) } : {})
+    }));
+  };
+
+  resolveVideoEmbed = (url) => {
+    if (!url) return null;
+    // YouTube
+    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([-\w]{11})/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    // Instagram – can't embed, show link card
+    if (url.includes('instagram.com')) return { type: 'link', url };
+    // Twitter/X
+    if (url.includes('twitter.com') || url.includes('x.com')) return { type: 'link', url };
+    // Direct video file
+    if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)) return { type: 'video', url };
+    // Fallback: try as generic link
+    return { type: 'link', url };
+  };
+
+  handleAuditionSubmit = async (e) => {
+    e.preventDefault();
+    this.setState({ auditionSubmitting: true });
+    try {
+      await axios.post(`${API_URL}api/audition`, this.state.auditionForm);
+    } catch (_) { /* best-effort */ }
+    this.setState({ auditionSubmitting: false, auditionDone: true });
+  };
 
   handleOverlayClick = () => {
     let apptag = this.props.match.params.apptype;
@@ -196,6 +268,7 @@ class Splash extends Component {
       this.setState({ intentvalue: res.data.smartUrl.data.app_intend });
       this.setState({ original_url: res.data.smartUrl.data.originalURL });
       this.setState({ ostype: res.data.smartUrl.data.os_type });
+      this.setState({ visitorcount: res.data.visitorCount || 0 });
       
       const countdownTime = videos.length > 0 ? videos.length * 7 : 4;
       this.setState({ countdown: countdownTime });
@@ -714,6 +787,13 @@ class Splash extends Component {
             </button>
           </div>
         )}
+
+        <div className="viewcount">
+          <button className="viewbutton">
+            <div className="greendot"></div>
+            <RollingCounter value={this.state.visitorcount} /> <span className="rolling-label">watching</span>
+          </button>
+        </div>
        
         
         <div className='ml-2 flex '  >
@@ -764,7 +844,7 @@ class Splash extends Component {
       <button className="spotlight-btn-vip" onClick={this.openVipModal}>
         👑 VIP Spotlight (₹20,000)
       </button>
-      <button className="spotlight-btn-audition" onClick={() => openPopup(state, "promote")}>
+      <button className="spotlight-btn-audition" onClick={this.openAuditionModal}>
         🚀 Audition (Promote it)
       </button>
     </div>
@@ -1174,6 +1254,117 @@ class Splash extends Component {
           style={{ width: '100%', height: '100%', border: 'none' }}
           title="AppOpener Presentation"
         />
+      </div>
+    </div>
+  )}
+
+  {/* ── AUDITION MODAL ── */}
+  {this.state.showAuditionModal && (
+    <div className="audition-overlay" onClick={(e) => { if (e.target.classList.contains('audition-overlay')) this.closeAuditionModal(); }}>
+      <div className="audition-card">
+        <button className="audition-close" onClick={this.closeAuditionModal}>✕</button>
+
+        {this.state.auditionDone ? (
+          <div className="audition-success">
+            <div className="audition-success-icon">🎬</div>
+            <h2>You're in the Queue!</h2>
+            <p>We've received your audition. We'll review your video and reach out soon. Stay tuned 🚀</p>
+            <button className="audition-submit-btn" onClick={this.closeAuditionModal}>Close</button>
+          </div>
+        ) : (
+          <>
+            <div className="audition-header">
+              <span className="audition-badge">🎬 AUDITION</span>
+              <h2 className="audition-title">Apply for Spotlight</h2>
+              <p className="audition-subtitle">Submit your video link to get featured in front of millions</p>
+            </div>
+
+            <form className="audition-form" onSubmit={this.handleAuditionSubmit}>
+              <div className="audition-field">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={this.state.auditionForm.name}
+                  onChange={e => this.handleAuditionField('name', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="audition-field">
+                <label>Creator ID / Handle</label>
+                <input
+                  type="text"
+                  placeholder="@yourchannel or creator ID"
+                  value={this.state.auditionForm.creatorId}
+                  onChange={e => this.handleAuditionField('creatorId', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="audition-field">
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="you@email.com"
+                  value={this.state.auditionForm.email}
+                  onChange={e => this.handleAuditionField('email', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="audition-field">
+                <label>Video Link</label>
+                <input
+                  type="url"
+                  placeholder="Paste YouTube / Instagram / video URL"
+                  value={this.state.auditionForm.videoLink}
+                  onChange={e => this.handleAuditionField('videoLink', e.target.value)}
+                />
+
+                {/* ── VIDEO PREVIEW ── */}
+                {this.state.auditionVideoEmbed && (
+                  <div className="audition-preview">
+                    {typeof this.state.auditionVideoEmbed === 'string' ? (
+                      <iframe
+                        src={this.state.auditionVideoEmbed}
+                        title="Video Preview"
+                        allowFullScreen
+                        allow="autoplay; encrypted-media"
+                        className="audition-preview-iframe"
+                      />
+                    ) : this.state.auditionVideoEmbed.type === 'video' ? (
+                      <video
+                        src={this.state.auditionVideoEmbed.url}
+                        controls
+                        className="audition-preview-video"
+                      />
+                    ) : (
+                      <a
+                        href={this.state.auditionVideoEmbed.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="audition-preview-link"
+                      >
+                        <span>🔗</span>
+                        <span className="audition-preview-link-url">{this.state.auditionVideoEmbed.url}</span>
+                        <span className="audition-preview-link-arrow">↗</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="audition-submit-btn"
+                disabled={this.state.auditionSubmitting}
+              >
+                {this.state.auditionSubmitting ? 'Submitting…' : '🚀 Submit Audition'}
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   )}
