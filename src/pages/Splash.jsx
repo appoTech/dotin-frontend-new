@@ -44,6 +44,11 @@ import ShareTray from "../components/ShareTray";
 // import avatarframe from "../assets/avatarframe.png";
 import avatarframe from "../assets/frame01.png"
 import { getAdHtml } from "../components/AdPresentation";
+import ss01 from "../assets/ss01.jpg";
+import ss02 from "../assets/ss02.jpg";
+import ss03 from "../assets/ss03.jpg";
+import ss04 from "../assets/ss04.jpg";
+import ss05 from "../assets/ss05.jpg";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001/";
 
@@ -159,7 +164,8 @@ class Splash extends Component {
       auditionForm: { name: "", creatorId: "", email: "", videoLink: "" },
       auditionVideoEmbed: null,
       auditionSubmitting: false,
-      auditionDone: false
+      auditionDone: false,
+      showHowItWorksModal: false
     };
     this.handleRedirect = this.handleRedirect.bind(this); 
     this.stopRedirecting = this.stopRedirecting.bind(this);
@@ -175,6 +181,15 @@ class Splash extends Component {
 
   closeAuditionModal = () => {
     this.setState({ showAuditionModal: false });
+  };
+
+  openHowItWorksModal = () => {
+    this.stopRedirecting();
+    this.setState({ showHowItWorksModal: true });
+  };
+
+  closeHowItWorksModal = () => {
+    this.setState({ showHowItWorksModal: false });
   };
 
   handleAuditionField = (field, value) => {
@@ -836,6 +851,18 @@ class Splash extends Component {
 
   {/* SPOTLIGHT SECTION */}
   <div className="spotlight-container">
+    <button 
+      className="spotlight-info-btn" 
+      onClick={this.openHowItWorksModal}
+      title="How it Works"
+      aria-label="How it Works"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </button>
     <div className="spotlight-badge">SPOTLIGHT ZONE ⚡</div>
     <p className="spotlight-description">
       Get your YouTube Video featured in the spotlight! Millions of views & impressions guaranteed.
@@ -1365,6 +1392,62 @@ class Splash extends Component {
             </form>
           </>
         )}
+      </div>
+    </div>
+  )}
+
+  {this.state.showHowItWorksModal && (
+    <div className="vip-modal-overlay" onClick={(e) => { if (e.target.classList.contains('vip-modal-overlay')) this.closeHowItWorksModal(); }}>
+      <div className="info-modal-card">
+        <button className="vip-modal-close" onClick={this.closeHowItWorksModal}>✕</button>
+        <h2 className="info-modal-heading">⚡ How Spotlight Works</h2>
+        <p className="info-modal-subheading">Feature your video on our high-traffic splash page to get millions of impressions.</p>
+        
+        <div className="info-steps">
+          <div className="info-step">
+            <span className="info-step-num">1</span>
+            <div>
+              <h3>Choose Your Spotlight Option</h3>
+              <p>Select <strong>👑 VIP Spotlight</strong> for guaranteed instant featuring for 25 hours, or apply via <strong>🚀 Audition</strong> to enter the review queue.</p>
+            </div>
+          </div>
+          <div className="info-step">
+            <span className="info-step-num">2</span>
+            <div>
+              <h3>Provide Your Details</h3>
+              <p>Enter your name, mobile number, email address, and your YouTube video URL link.</p>
+            </div>
+          </div>
+          <div className="info-step">
+            <span className="info-step-num">3</span>
+            <div>
+              <h3>Feature Goes Live</h3>
+              <p>For VIP, complete the checkout. For Audition, wait for review. Once verified, your video goes live instantly at the top of our page!</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="info-proofs-section">
+          <h3 className="proofs-heading">📈 Proof of Results</h3>
+          <p className="proofs-subheading">Here are some performance screenshots showing views and impressions generated via Spotlight:</p>
+          <div className="proofs-grid">
+            <div className="proof-card">
+              <img src={ss01} alt="Campaign Stats 1" className="proof-img" loading="lazy" />
+            </div>
+            <div className="proof-card">
+              <img src={ss02} alt="Campaign Stats 2" className="proof-img" loading="lazy" />
+            </div>
+            <div className="proof-card">
+              <img src={ss03} alt="Campaign Stats 3" className="proof-img" loading="lazy" />
+            </div>
+            <div className="proof-card">
+              <img src={ss04} alt="Campaign Stats 4" className="proof-img" loading="lazy" />
+            </div>
+            <div className="proof-card">
+              <img src={ss05} alt="Campaign Stats 5" className="proof-img" loading="lazy" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )}
