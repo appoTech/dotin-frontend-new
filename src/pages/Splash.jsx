@@ -1401,7 +1401,7 @@ class Splash extends Component {
       <div className="info-modal-card">
         <button className="vip-modal-close" onClick={this.closeHowItWorksModal}>✕</button>
         <h2 className="info-modal-heading">⚡ How Spotlight Works</h2>
-        <p className="info-modal-subheading">Feature your video on our high-traffic splash page to get millions of impressions.</p>
+        <p className="info-modal-subheading">Feature your video on our high-traffic splash page.</p>
         
         <div className="info-steps">
           <div className="info-step">
