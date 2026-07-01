@@ -232,7 +232,7 @@ class Splash extends Component {
     if (spotlightVideos && spotlightVideos.length > 0) {
       window.open(spotlightVideos[currentSpotlightIndex].ytvideoLink, "_blank");
     } else {
-      window.location.assign("https://youtu.be/njHZ40CLIjA");
+      window.location.assign("https://youtu.be/v=F2Huq9x9joA");
     }
   }
 
@@ -699,7 +699,7 @@ class Splash extends Component {
                 src={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
                     ? getYoutubeEmbedUrl(this.state.spotlightVideos[this.state.currentSpotlightIndex].ytvideoLink)
-                    : "https://www.youtube.com/embed/njHZ40CLIjA?autoplay=1&loop=1&mute=1"
+                    : "https://www.youtube.com/embed/v=F2Huq9x9joA?autoplay=1&loop=1&mute=1"
                 }
                 title={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
