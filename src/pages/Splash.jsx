@@ -691,6 +691,7 @@ class Splash extends Component {
       {/* {this.state.showShareOptions && this.renderShareOptions()} */}
 
       <div className='hero-section'>
+        <div className="spotlight"><span className="torch">🔦</span> SPOTLIGHT 🔦</div>
         <div className='latest-link '>
    
           <div className='latest-link-img  '>
