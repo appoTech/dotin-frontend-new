@@ -583,6 +583,9 @@ class Splash extends Component {
 
   render() {
     const { promotes = [], currentIndex = 0 } = this.state;
+    const activeVideo = this.state.spotlightVideos && this.state.spotlightVideos.length > 0
+      ? this.state.spotlightVideos[this.state.currentSpotlightIndex]
+      : null;
     const navItems = [
       {},
       {},
@@ -662,12 +665,12 @@ class Splash extends Component {
     ]; */
     return (
       <>
-    <div className='main-container'>
+    <div className="relative min-h-screen w-full overflow-hidden font-nerko">
       {/* <img
         src={mapBg}
         alt=""
         loading="lazy"
-        className="splash-bg"
+        className="absolute inset-0 w-full h-full object-cover -z-50"
       /> */}
       {/* <div className='header'> */}
         {/* <div className='user-details'> */}
@@ -676,7 +679,7 @@ class Splash extends Component {
         {/* </Link> */}
           {/* <p className='user-tag'><span className=' pb-1 '>AI</span><span></span></p> */}
         {/* </div> */}
-       {/*  <button onClick={this.handleShare}  className="share-button   border border-white text-white bg-white hover:bg-white hover:text-black rounded">
+        {/*  <button onClick={this.handleShare}  className="share-button   border border-white text-white bg-white hover:bg-white hover:text-black rounded">
         <img className='share-img ' src={share} alt='Channel Logo' /> 
       </button> */}
 
@@ -690,13 +693,15 @@ class Splash extends Component {
       {/* </div> */}
       {/* {this.state.showShareOptions && this.renderShareOptions()} */}
 
-      <div className='hero-section'>
-        <div className="spotlight"><span className="torch">🔦</span> SPOTLIGHT 🔦</div>
-        <div className='latest-link '>
+      <div className="spotlight-title-container flex justify-center text-center w-full py-1">
+        <div className="text-[40px] font-bold text-[#ffc928] [text-shadow:2px_2px_4px_#1e1b4b] [filter:brightness(1.3)_drop-shadow(0_8px_20px_rgba(255,201,40,0.8))_drop-shadow(0_12px_30px_rgba(255,201,40,0.4))] shadow-[0_15px_40px_rgba(255,201,40,0.6),0_25px_60px_rgba(255,201,40,0.3)]"><span className="inline-block -scale-x-100">🔦</span> SPOTLIGHT 🔦</div>
+      </div>
+      <div className="flex flex-col justify-center items-center gap-6 w-full max-w-[480px] mx-auto px-2 box-border md:max-w-[720px] md:gap-8 -mt-1">
+        <div className="flex flex-col justify-center items-center w-full max-w-[480px] relative md:max-w-[720px]">
    
-          <div className='latest-link-img  '>
-            <div className="iframe-container">
-              <iframe className="vid"
+          <div className="relative rounded-xl overflow-hidden block w-full max-w-[480px] md:max-w-[720px]">
+            <div className="relative w-full aspect-video rounded-t-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 bg-black">
+              <iframe className="w-full h-full block border-none"
                 src={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
                     ? getYoutubeEmbedUrl(this.state.spotlightVideos[this.state.currentSpotlightIndex].ytvideoLink)
@@ -713,24 +718,25 @@ class Splash extends Component {
                 allowFullScreen
               ></iframe>
               {this.state.spotlightVideos && this.state.spotlightVideos.length > 0 && (
-                <div className="iframe-spotlight-tag">SPOTLIGHT ⚡</div>
+                <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-oswald font-black text-[11px] py-1 px-2.5 rounded shadow-[0_0_10px_rgba(250,204,21,0.6)] pointer-events-none z-[150] tracking-wider">SPOTLIGHT ⚡</div>
               )}
-              <div className="iframe-overlay" onClick={this.handleOverlayClick}></div>
+              <div className="absolute inset-0 cursor-pointer z-[100] bg-transparent" onClick={this.handleOverlayClick}></div>
             </div>
 
-            <div className='video-info flex'>
-              <img className='channel-logo' src={creatoryt} alt='Channel Logo' />
-              <div className='video-details'>
-                <h4 className='video-title'>Monetise and Analyse with AppOpener</h4>
-                <p className='channel-name'>CreatorCosmos</p>
+            <div className="flex items-center w-full p-1.25 bg-[#232222]">
+              <img className="w-[47px] h-[47px] rounded-full mr-[15px] ml-[10px] p-[5px] -mt-[5px] bg-black" src={this.state.ytavatar !== "" ? this.state.ytavatar : logo} alt="Channel Logo" referrerPolicy="no-referrer" />
+              <div className="flex flex-col pt-2.5 text-left">
+                <h4 className="text-sm font-bold m-0 text-white font-playwrite">
+                  {activeVideo ? (activeVideo.title || activeVideo.name) : "Monetise and Analyse with AppOpener"}
+                </h4>
+                <p className="text-lg text-[#606060] mt-1">
+                  {activeVideo ? (activeVideo.channelName || activeVideo.name) : "CreatorCosmos"}
+                </p>
               </div>
             </div>
 
-
           </div>
-          <a id="abcd" target="_self">
-          
-          </a>  
+          <a id="abcd" target="_self"></a>  
        
         {/*   <div className='videoLinks flex-row    pb-3'>
             <div className='flex'>
@@ -764,8 +770,8 @@ class Splash extends Component {
             </div>
           )} 
         </div>
-        <div className="conti">
-        <div className="continueButton stickyButton bg-red-500 text-white">
+        <div className="flex flex-col items-center justify-center flex-1 w-full max-w-[480px] box-border md:max-w-[720px] -mt-4">
+          <div className="w-full bg-[#d72323] h-10 flex flex-row justify-center items-center rounded-none sticky top-0 z-[3] text-white md:h-[52px]">
           {this.state.showRedirectText ? (
             <p className="pt-3">Redirecting in {this.state.countdown} seconds...</p>
           ) : (
@@ -777,222 +783,136 @@ class Splash extends Component {
            className=" bg-black  "
            style={{ width: '40px', height: '40px' }}
          /> */}
-         <FaYoutube style={{color:'white'}} size="32px"/>
-             <div className=' gap-2 pt-1   text-red-500 flex '>
-             
-             Watch Now
-             <FaArrowRight className='flex pt-1'color='white' size='20px'/>
-             </div>
-           </button>
+              <FaYoutube style={{color:'white'}} size="32px"/>
+              <div className="gap-2 pt-1 flex text-lg">
+                Watch Now
+                <FaArrowRight className="flex pt-1" color="white" size="20px"/>
+              </div>
+            </button>
           )}
-          
         </div>
 
         {/* Cancel Button */}
         {this.state.showRedirectText && (
-          <div className="cancel" id="cancel">
+          <div className="w-auto flex justify-center items-center mt-2.5" id="cancel">
             <button
-              style={{
-                color: "white",
-                fontWeight: "600",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-              }}
+              className="text-white font-normal text-[32px] rounded-[5px] bg-black [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)] cursor-pointer py-[5px] px-[25px]"
               onClick={this.stopRedirecting}
-               >
+            >
               Cancel
             </button>
           </div>
         )}
 
-        <div className="viewcount">
-          <button className="viewbutton">
-            <div className="greendot"></div>
-            <RollingCounter value={this.state.visitorcount} /> <span className="rolling-label">watching</span>
+        <div className="flex justify-center items-center mt-2 mb-4">
+          <button className="inline-flex items-center gap-[7px] py-[10px] pr-[18px] pl-[14px] bg-black/55 backdrop-blur-[10px] border border-white/12 rounded-full text-white font-inter text-[28px] font-semibold tracking-[0.3px] cursor-default select-none animate-viewer-fadein transition-transform duration-200 hover:scale-[1.04]">
+            <div className="w-3 h-3 rounded-full bg-[#22c55e] shrink-0 animate-pulse-dot"></div>
+            <RollingCounter value={this.state.visitorcount} /> <span className="ml-[1px]">watching</span>
           </button>
         </div>
-       
-        
-        <div className='ml-2 flex '  >
-     
-
-<div  className="mt-4">
-        
-      </div> 
-           
-     
       </div>
       </div>
-
-      </div>
-<div
-      className="splash-share-btn"
-      onClick={() => this.setState({ shareTrayOpen: true })}
+    <div
+      className="relative -top-6 left-1/2 -translate-x-1/2 flex items-center justify-center mt-2 rounded-full bg-white w-auto cursor-pointer z-[100] transition-all duration-200 hover:bg-[#4338ca] hover:-translate-x-1/2 hover:scale-[1.05]"
     >
-      <div className="splash-share-inner">
+      <div 
+      className="relative w-28 h-28 flex items-center justify-center"
+      onClick={() => this.setState({ shareTrayOpen: true })}
+      >
         <img
           src={avatarframe}
           alt=""
-          className="splash-share-avatarframe animate-spin-slow"
+          className="absolute top-1 left-1 w-26 h-26 animate-spin-slow"
         />
-        <div className="splash-share-icon-container">
+        <div className="absolute inset-0 flex items-center justify-center">
           {displayLogo}
         </div>
       </div>
     </div>
 
-      <div
-  style={{
-    width: "100%",
-    maxWidth: "1200px",
-    margin: "auto",
-    padding: "0 12px",
-  }}
->
-  {/* HEADER */}
+      <div className="w-full max-w-[1200px] mx-auto px-3">
+        {/* HEADER */}
 
-  {/* SPOTLIGHT SECTION */}
-  <div className="spotlight-container">
-    <button 
-      className="spotlight-info-btn" 
-      onClick={this.openHowItWorksModal}
-      title="How it Works"
-      aria-label="How it Works"
-    >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-    </button>
-    <div className="spotlight-badge">SPOTLIGHT ZONE ⚡</div>
-    <p className="spotlight-description">
-      Get your YouTube Video featured in the spotlight! Millions of views & impressions guaranteed.
-    </p>
-    <div className="spotlight-buttons">
-      <button className="spotlight-btn-vip" onClick={this.openVipModal}>
-        👑 VIP Spotlight (₹20,000)
-      </button>
-      <button className="spotlight-btn-audition" onClick={this.openAuditionModal}>
-        🚀 Audition (Promote it)
-      </button>
-    </div>
-  </div>
+        {/* SPOTLIGHT SECTION */}
+        <div className="bg-gradient-to-br from-[#090d22] to-[#15103a] border-2 border-[#8b5cf6] rounded-[24px] p-6 mb-3 mx-auto max-w-[1200px] w-full text-center relative overflow-hidden shadow-[0_0_25px_rgba(139,92,246,0.25)]">
+          <button 
+            className="absolute top-4 right-4 bg-white/8 border border-white/15 text-[#a78bfa] w-[38px] h-[38px] rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8b5cf6]/25 hover:border-[#8b5cf6] hover:text-white hover:rotate-15 hover:scale-110 active:scale-95 shadow-[0_0_15px_rgba(139,92,246,0.4)] z-10 p-0 outline-none" 
+            onClick={this.openHowItWorksModal}
+            title="How it Works"
+            aria-label="How it Works"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </button>
+          <div className="inline-block bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-oswald font-extrabold text-base py-1.5 px-4 rounded-[50px] uppercase tracking-[1.5px] shadow-[0_0_15px_rgba(250,204,21,0.4)] mb-3">SPOTLIGHT ZONE ⚡</div>
+          <p className="text-[#94a3b8] font-inter text-base max-w-[600px] mx-auto mb-5 leading-relaxed">
+            Get your YouTube Video featured in the spotlight! Millions of views & impressions guaranteed.
+          </p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <button className="bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white border border-[#fbbf24] font-inter font-bold text-lg py-3.5 px-7 rounded-2xl cursor-pointer shadow-[0_4px_15px_rgba(217,119,6,0.3)] hover:shadow-[0_8px_25px_rgba(217,119,6,0.5)] transition-all duration-300 hover:-translate-y-0.75 flex items-center gap-2" onClick={this.openVipModal}>
+              👑 VIP Spotlight (₹20,000)
+            </button>
+            <button className="bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white border border-[#818cf8] font-inter font-bold text-lg py-3.5 px-7 rounded-2xl cursor-pointer shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_8px_25px_rgba(79,70,229,0.5)] transition-all duration-300 hover:-translate-y-0.75 flex items-center gap-2" onClick={this.openAuditionModal}>
+              🚀 Audition (Promote it)
+            </button>
+          </div>
+        </div>
 
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "14px",
-      flexWrap: "wrap",
-      gap: "10px",
-    }}
-  >
-    <button
-      onClick={() => openPopup(state, "promote")}
-      style={{
-        background: "#1b1c5c",
-        color: "#ffe066",
-        border: "2px solid #facc15",
-        borderRadius: "16px",
-        padding: "14px 18px",
-        fontSize: "24px",
-        fontWeight: "700",
-        cursor: "pointer",
-        boxShadow: "0 0 18px rgba(255,215,0,0.2)",
-      }}
-    >
-      Spawnser the feat ✨ - $11
-    </button>
-  </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "14px",
+            width: "100%",
+          }}
+        >
+          <button
+            onClick={() => openPopup(state, "promote")}
+            className="bg-[#1b1c5c] text-[#ffe066] border-2 border-yellow-400 rounded-2xl py-2.5 px-4 text-[28px] sm:text-[24px] md:text-[32px] font-bold font-oswald cursor-pointer shadow-[0_0_18px_rgba(255,215,0,0.15)] transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_24px_rgba(255,215,0,0.3)] sm:py-3.5 sm:px-[18px]"
+          >
+            Spawnser the feat ✨ - $11
+          </button>
+        </div>
 
   {/* MAIN CARD */}
-  <div
-    style={{
-      background: "#07113d",
-      border: "2px solid #4f46e5",
-      borderRadius: "28px",
-      padding: "20px",
-      width: "100%",
-      position: "relative",
-    }}
-  >
+  <div className="bg-[#07113d] border-2 border-[#4f46e5] rounded-[28px] p-5 w-full relative">
     
     {/* FEATURED */}
     {promotes.length > 0 && (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div className="flex justify-center">
         <div
-  onClick={() => {
-    const isLastThree =
-      currentIndex >= promotes.length - 3;
+          onClick={() => {
+            const isLastThree =
+              currentIndex >= promotes.length - 3;
 
-    if (isLastThree) {
-      openPopup(state, "promote");
-    } else {
-      window.open(
-        promotes[currentIndex]?.linkUrl,
-        "_blank"
-      );
-    }
-  }}
-          style={{
-            width: "100%",
-            maxWidth: "800px",
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: "24px",
-            textDecoration: "none",
+            if (isLastThree) {
+              openPopup(state, "promote");
+            } else {
+              window.open(
+                promotes[currentIndex]?.linkUrl,
+                "_blank"
+              );
+            }
           }}
+          className="w-full max-w-[800px] relative overflow-hidden rounded-[24px] no-underline cursor-pointer"
         >
           <img
             src={promotes[currentIndex].image || video1}
             alt={promotes[currentIndex]?.title}
-            style={{
-              width: "100%",
-              borderRadius: "24px",
-              objectFit: "cover",
-              maxHeight: "500px",
-            }}
+            className="w-full rounded-[24px] object-cover"
           />
 
           {/* TITLE */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "14px",
-              left: "14px",
-              background: "rgba(0,0,0,0.7)",
-              color: "white",
-              padding: "8px 14px",
-              borderRadius: "10px",
-              fontWeight: "700",
-              fontSize: "20px",
-            }}
-          >
+          <div className="absolute bottom-3.5 left-3.5 right-[90px] bg-black/75 backdrop-blur-[2px] text-white py-2 px-3.5 rounded-lg font-bold text-xl truncate sm:text-sm sm:py-1.5 sm:px-2.5 sm:bottom-2.5 sm:left-2.5 sm:right-[70px]">
             {promotes[currentIndex]?.title}
           </div>
 
           {/* FLOAT ICON */}
-          <div
-            style={{
-              position: "absolute",
-              right: "14px",
-              bottom: "20px",
-              width: "60px",
-              height: "60px",
-              borderRadius: "50%",
-              background: "black",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "2px solid #d946ef",
-            }}
-          >
+          <div className="absolute right-3.5 bottom-5 w-[60px] h-[60px] rounded-full bg-black flex items-center justify-center border-2 border-[#d946ef] sm:w-11 sm:h-11 sm:bottom-3 sm:right-3">
             <img
               src={logo}
               alt="logo"
@@ -1008,128 +928,65 @@ class Splash extends Component {
     )}
 
     {/* PROMOTE BUTTON */}
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "30px",
-      }}
-    >
+    <div className="flex justify-center mt-[30px]">
       <button
         onClick={() => openPopup(state, "promote")}
-        style={{
-          width: "100%",
-          maxWidth: "500px",
-          borderRadius: "22px",
-          background: "#c9ced6",
-          border: "2px solid #6b7280",
-          padding: "40px 20px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-        }}
+        className="w-full max-w-[500px] rounded-[22px] bg-[#c9ced6] border-2 border-[#6b7280] py-[30px] px-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:bg-[#dbe1e8] sm:py-5 sm:px-3.5"
       >
-        <div
-          style={{
-            fontSize: "40px",
-            fontWeight: "900",
-            color: "black",
-            lineHeight: 1,
-          }}
-        >
-          +
-        </div>
+        <div className="text-[40px] font-black text-black leading-none sm:text-[30px]">+</div>
 
-        <div
-          style={{
-            fontSize: "24px",
-            fontWeight: "700",
-            color: "black",
-            marginTop: "10px",
-          }}
-        >
-          Promote it 🚀
-        </div>
+        <div className="text-2xl font-bold text-black mt-2.5 sm:text-lg sm:mt-1.5">Promote it 🚀</div>
       </button>
     </div>
 
     {/* CARDS */}
-    <div
-      style={{
-        display: "flex",
-        gap: "16px",
-        overflowX: "auto",
-        padding: "30px 0 10px",
-        marginTop: "10px",
-      }}
-    >
+    <div className="flex gap-4 overflow-x-auto py-7 px-0 mt-2.5">
       {Array.isArray(promotes) &&
         promotes.length > 1 &&
         promotes.map((item, idx) => (
           <div
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            style={{
-              minWidth: "150px",
-              background: "#1b234f",
-              borderRadius: "18px",
-              overflow: "hidden",
-              cursor: "pointer",
-              border:
-                idx === currentIndex
-                  ? "2px solid #facc15"
-                  : "2px solid transparent",
-              transform:
-                idx === currentIndex ? "scale(1.05)" : "scale(1)",
-              opacity: idx === currentIndex ? 1 : 0.8,
-              transition: "0.3s",
-              position: "relative",
-            }}
+            className={`min-w-[150px] bg-[#1b234f] rounded-[18px] overflow-hidden cursor-pointer transition-all duration-300 relative border-2 ${
+              idx === currentIndex
+                ? "border-[#facc15] scale-105 opacity-100"
+                : "border-transparent scale-100 opacity-80"
+            }`}
           >
             {/* PRICE */}
-            <div
-              style={{
-                position: "absolute",
-                top: "5px",
-                right: "5px",
-                background: "rgba(0,0,0,0.7)",
-                color: "white",
-                padding: "4px 8px",
-                borderRadius: "8px",
-                fontSize: "20px",
-                fontWeight: "bold",
-              }}
-            >
+            <div className="absolute top-2 right-2 bg-black/70 text-white py-1 px-2 rounded-lg text-[14px] font-bold">
               ₹25
             </div>
 
             <img
               src={item.image || video1}
               alt={item.title}
-              style={{
-                width: "100%",
-                height: "130px",
-                objectFit: "cover",
-              }}
+              className="w-full h-[130px] object-cover block"
             />
 
-            <div
-              style={{
-                color: "white",
-                textAlign: "center",
-                padding: "12px",
-                fontWeight: "700",
-                fontSize: "18px",
-              }}
-            >
+            <div className="text-white text-center p-3 font-bold text-[18px] whitespace-nowrap overflow-hidden truncate">
               {item.title}
             </div>
           </div>
         ))}
     </div>
   </div>
+
+  {/* PORTAL IMAGE CONTAINER */}
+  <a
+    href="https://www.appopener.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="block mt-8 mb-4 relative z-10"
+  >
+    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+      <img
+        src={portalImage}
+        alt="AppOpener portal"
+        className="w-full object-cover"
+      />
+    </div>
+  </a>
 </div>
        {/* <div className='caro-container'>
         <Carousel items={carouselItems}/>
@@ -1140,19 +997,6 @@ class Splash extends Component {
       {/* <Float/> */}
       {this.state.showShareOptions && this.renderShareOptions()}
     </div>
-        <a
-  href="https://www.appopener.com/"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <div className="relative z-10 mb-4 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-  <img
-    src={portalImage}
-    alt="AppOpener portal"
-    className="h-80 w-full object-cover sm:h-96"
-  />
-  </div>
-  </a>
   <ShareTray 
     open={this.state.shareTrayOpen} 
     onOpenChange={(isOpen) => this.setState({ shareTrayOpen: isOpen })} 
@@ -1161,19 +1005,19 @@ class Splash extends Component {
   <PipIframe src={"https://www.instagram.com/reel/DYrsaGER61u/?igsh=dGw4cGJoYXl4cWhm"} />
 
   {this.state.showVipModal && (
-    <div className="vip-modal-overlay">
-      <div className="vip-modal-card">
-        <button className="vip-modal-close" onClick={this.closeVipModal}>✕</button>
+    <div className="fixed inset-0 bg-[#020617]/85 backdrop-blur-[8px] flex items-center justify-center z-[9999] p-4">
+      <div className="relative bg-[#0f172a] border-2 border-[#f59e0b] rounded-[24px] p-8 w-full max-w-[520px] shadow-[0_0_35px_rgba(245,158,11,0.25)] animate-modal-zoom-in overflow-hidden sm:p-5">
+        <button className="absolute top-4 right-4 bg-[#1e293b] border-none text-[#94a3b8] w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[#334155] hover:text-white" onClick={this.closeVipModal}>✕</button>
         
         {this.state.vipStep === "form" && (
-          <form onSubmit={this.handleVipSubmit} className="vip-modal-form">
-            <h2 className="vip-modal-heading">👑 VIP Spotlight Feature</h2>
-            <p className="vip-modal-subheading">Feature your video on our splash page for 25 hours.</p>
+          <form onSubmit={this.handleVipSubmit} className="flex flex-col">
+            <h2 className="text-white text-2xl font-bold font-oswald m-0 mb-1.5 text-left">👑 VIP Spotlight Feature</h2>
+            <p className="text-[#94a3b8] font-inter text-sm m-0 mb-6 text-left">Feature your video on our splash page for 25 hours.</p>
             
-            <div className="vip-form-group">
-              <label className="vip-label">Your Name <span className="required">*</span></label>
+            <div className="flex flex-col mb-4.5 items-start">
+              <label className="font-inter text-[#cbd5e1] text-sm font-semibold mb-1.5 text-left w-full block">Your Name <span className="text-red-500 ml-0.5">*</span></label>
               <input
-                className="vip-input"
+                className="w-full bg-[#1e293b] border border-[#475569] text-white font-inter text-[15px] py-3 px-4 rounded-xl outline-none transition-colors duration-200 focus:border-[#f59e0b]"
                 type="text"
                 name="name"
                 value={this.state.vipForm.name}
@@ -1183,10 +1027,10 @@ class Splash extends Component {
               />
             </div>
 
-            <div className="vip-form-group">
-              <label className="vip-label">Mobile Number <span className="required">*</span></label>
+            <div className="flex flex-col mb-4.5 items-start">
+              <label className="font-inter text-[#cbd5e1] text-sm font-semibold mb-1.5 text-left w-full block">Mobile Number <span className="text-red-500 ml-0.5">*</span></label>
               <input
-                className="vip-input"
+                className="w-full bg-[#1e293b] border border-[#475569] text-white font-inter text-[15px] py-3 px-4 rounded-xl outline-none transition-colors duration-200 focus:border-[#f59e0b]"
                 type="tel"
                 name="mobile"
                 value={this.state.vipForm.mobile}
@@ -1198,10 +1042,10 @@ class Splash extends Component {
               />
             </div>
 
-            <div className="vip-form-group">
-              <label className="vip-label">Email Address <span className="required">*</span></label>
+            <div className="flex flex-col mb-4.5 items-start">
+              <label className="font-inter text-[#cbd5e1] text-sm font-semibold mb-1.5 text-left w-full block">Email Address <span className="text-red-500 ml-0.5">*</span></label>
               <input
-                className="vip-input"
+                className="w-full bg-[#1e293b] border border-[#475569] text-white font-inter text-[15px] py-3 px-4 rounded-xl outline-none transition-colors duration-200 focus:border-[#f59e0b]"
                 type="email"
                 name="email"
                 value={this.state.vipForm.email}
@@ -1211,10 +1055,10 @@ class Splash extends Component {
               />
             </div>
 
-            <div className="vip-form-group">
-              <label className="vip-label">YouTube Video URL <span className="required">*</span></label>
+            <div className="flex flex-col mb-4.5 items-start">
+              <label className="font-inter text-[#cbd5e1] text-sm font-semibold mb-1.5 text-left w-full block">YouTube Video URL <span className="text-red-500 ml-0.5">*</span></label>
               <input
-                className="vip-input"
+                className="w-full bg-[#1e293b] border border-[#475569] text-white font-inter text-[15px] py-3 px-4 rounded-xl outline-none transition-colors duration-200 focus:border-[#f59e0b]"
                 type="url"
                 name="ytLink"
                 value={this.state.vipForm.ytLink}
@@ -1224,46 +1068,46 @@ class Splash extends Component {
               />
             </div>
 
-            <div className="vip-modal-fee-box">
-              <span className="vip-fee-label">VIP Spotlight Fee</span>
-              <strong className="vip-fee-value">₹20,000</strong>
+            <div className="bg-[#1e1b4b] border border-[#312e81] p-4 rounded-xl flex justify-between items-center mb-6 mt-4">
+              <span className="font-inter text-[#818cf8] font-semibold text-sm">VIP Spotlight Fee</span>
+              <strong className="font-inter text-[#fbbf24] text-xl font-bold">₹20,000</strong>
             </div>
 
             {this.state.vipResult && !this.state.vipResult.success && (
-              <div className="vip-alert vip-alert-error">
+              <div className="bg-red-500/15 border border-red-500 text-red-300 rounded-xl p-3 mb-4.5 text-sm text-left font-inter">
                 {this.state.vipResult.message}
               </div>
             )}
 
-            <button type="submit" disabled={this.state.vipSubmitting} className="vip-btn-submit">
+            <button type="submit" disabled={this.state.vipSubmitting} className="w-full bg-gradient-to-br from-[#f59e0b] to-[#d97706] text-white border-none font-inter font-bold text-base py-3.5 rounded-xl cursor-pointer transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed">
               {this.state.vipSubmitting ? "Processing..." : "Pay ₹20,000 & Feature Video"}
             </button>
           </form>
         )}
 
         {this.state.vipStep === "paying" && (
-          <div className="vip-modal-status">
-            <div className="vip-spinner" />
-            <h3>Processing VIP Payment...</h3>
-            <p>Please complete checkout in the payment window.</p>
+          <div className="flex flex-col items-center justify-center py-10 px-5 text-center font-inter">
+            <div className="w-12 h-12 border-3 border-amber-400/10 rounded-full border-t-amber-400 animate-spin mb-6" />
+            <h3 className="text-white text-lg font-bold">Processing VIP Payment...</h3>
+            <p className="text-[#94a3b8] text-sm mt-2">Please complete checkout in the payment window.</p>
           </div>
         )}
 
         {this.state.vipStep === "success" && (
-          <div className="vip-modal-status">
-            <div className="vip-success-icon">🎉</div>
-            <h3>VIP Spotlight Active!</h3>
-            <p>{this.state.vipResult?.message || "Your video is now featured in the spotlight zone."}</p>
-            <button type="button" onClick={this.closeVipModal} className="vip-btn-submit">Done</button>
+          <div className="flex flex-col items-center justify-center py-10 px-5 text-center font-inter">
+            <div className="text-[56px] mb-5 animate-pulse">🎉</div>
+            <h3 className="text-white text-lg font-bold">VIP Spotlight Active!</h3>
+            <p className="text-[#94a3b8] text-sm mt-2">{this.state.vipResult?.message || "Your video is now featured in the spotlight zone."}</p>
+            <button type="button" onClick={this.closeVipModal} className="w-full bg-gradient-to-br from-[#f59e0b] to-[#d97706] text-white border-none font-inter font-bold text-base py-3.5 rounded-xl cursor-pointer transition-opacity duration-200 hover:opacity-90 mt-6">Done</button>
           </div>
         )}
 
         {this.state.vipStep === "pending" && (
-          <div className="vip-modal-status">
-            <div className="vip-pending-icon">⏳</div>
-            <h3>Payment Verification Pending</h3>
-            <p>Your payment is still being processed. It will be verified shortly.</p>
-            <button type="button" onClick={this.closeVipModal} className="vip-btn-submit">Close</button>
+          <div className="flex flex-col items-center justify-center py-10 px-5 text-center font-inter">
+            <div className="text-[56px] mb-5 animate-pulse">⏳</div>
+            <h3 className="text-white text-lg font-bold">Payment Verification Pending</h3>
+            <p className="text-[#94a3b8] text-sm mt-2">Your payment is still being processed. It will be verified shortly.</p>
+            <button type="button" onClick={this.closeVipModal} className="w-full bg-gradient-to-br from-[#f59e0b] to-[#d97706] text-white border-none font-inter font-bold text-base py-3.5 rounded-xl cursor-pointer transition-opacity duration-200 hover:opacity-90 mt-6">Close</button>
           </div>
         )}
       </div>
@@ -1271,9 +1115,9 @@ class Splash extends Component {
   )}
 
   {this.state.showAdOverlay && (
-    <div className="ad-overlay">
-      <div className="ad-iframe-container">
-        <button className="ad-close-btn" onClick={() => {
+    <div className="fixed inset-0 w-screen h-screen bg-black/95 flex items-center justify-center z-[10000]">
+      <div className="relative w-full h-screen max-w-[800px] bg-black border-l border-r border-[#1a1a1a]">
+        <button className="absolute top-4 left-4 z-[10100] bg-white/10 border border-white/20 text-white py-2 px-4 rounded-full cursor-pointer font-mono text-xs transition-all duration-200 hover:bg-red-500/20 hover:border-red-500" onClick={() => {
           this.setState({ showAdOverlay: false, adHtml: null });
         }}>✕ Close</button>
         <iframe
@@ -1288,29 +1132,30 @@ class Splash extends Component {
 
   {/* ── AUDITION MODAL ── */}
   {this.state.showAuditionModal && (
-    <div className="audition-overlay" onClick={(e) => { if (e.target.classList.contains('audition-overlay')) this.closeAuditionModal(); }}>
-      <div className="audition-card">
-        <button className="audition-close" onClick={this.closeAuditionModal}>✕</button>
-
+    <div className="fixed inset-0 w-screen h-screen bg-black/70 backdrop-blur-md flex items-center justify-center z-[1000] p-5 box-border animate-audition-fadein" onClick={(e) => { if (e.target.classList.contains('fixed')) this.closeAuditionModal(); }}>
+      <div className="relative bg-gradient-to-br from-[#0f0f1a] to-[#12121f] border border-white/8 rounded-2xl p-7 w-full max-w-[440px] max-h-[92vh] overflow-y-auto shadow-[0_24px_80px_rgba(0,0,0,0.7),0_0_0_1px_rgba(139,92,246,0.15)] animate-audition-slidein scrollbar-thin sm:p-4.5 sm:rounded-xl sm:max-h-[95vh]">
+        <button className="absolute top-3.5 right-3.5 bg-white/5 border border-white/10 text-white/60 w-8 h-8 rounded-full cursor-pointer flex items-center justify-center transition-colors duration-200 hover:bg-red-500/25 hover:text-white" onClick={this.closeAuditionModal}>✕</button>
+ 
         {this.state.auditionDone ? (
-          <div className="audition-success">
-            <div className="audition-success-icon">🎬</div>
-            <h2>You're in the Queue!</h2>
-            <p>We've received your audition. We'll review your video and reach out soon. Stay tuned 🚀</p>
-            <button className="audition-submit-btn" onClick={this.closeAuditionModal}>Close</button>
+          <div className="flex flex-col items-center text-center py-6 px-4 font-inter">
+            <div className="text-5xl mb-4 animate-bounce">🎬</div>
+            <h2 className="text-white text-xl font-bold font-oswald">You're in the Queue!</h2>
+            <p className="text-slate-400 text-sm mt-2">We've received your audition. We'll review your video and reach out soon. Stay tuned 🚀</p>
+            <button className="w-full bg-gradient-to-br from-[#7c3aed] to-[#a855f7] text-white border-none rounded-xl py-3.25 px-3.5 text-[15px] font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] sm:py-2.75 sm:text-sm sm:rounded-lg mt-6" onClick={this.closeAuditionModal}>Close</button>
           </div>
         ) : (
           <>
-            <div className="audition-header">
-              <span className="audition-badge">🎬 AUDITION</span>
-              <h2 className="audition-title">Apply for Spotlight</h2>
-              <p className="audition-subtitle">Submit your video link to get featured in front of millions</p>
+            <div className="mb-5.5 text-left">
+              <span className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white text-[10px] font-bold tracking-[2px] uppercase py-1 px-3 rounded-full mb-3">🎬 AUDITION</span>
+              <h2 className="text-white text-2xl font-bold font-oswald m-0 mb-1.5 leading-snug">Apply for Spotlight</h2>
+              <p className="text-white/45 font-inter text-xs m-0 leading-normal">Submit your video link to get featured in front of millions</p>
             </div>
-
-            <form className="audition-form" onSubmit={this.handleAuditionSubmit}>
-              <div className="audition-field">
-                <label>Full Name</label>
+ 
+            <form className="flex flex-col gap-4 text-left" onSubmit={this.handleAuditionSubmit}>
+              <div className="flex flex-col items-start w-full">
+                <label className="text-[11px] font-semibold text-white/55 tracking-wider uppercase mb-1.5 block text-left font-inter w-full">Full Name</label>
                 <input
+                  className="w-full bg-white/5 border border-white/10 rounded-lg py-[11px] px-3.5 text-white font-inter text-sm outline-none transition-all duration-200 focus:border-[#7c3aed] focus:bg-[#7c3aed]/8"
                   type="text"
                   placeholder="Your name"
                   value={this.state.auditionForm.name}
@@ -1318,10 +1163,11 @@ class Splash extends Component {
                   required
                 />
               </div>
-
-              <div className="audition-field">
-                <label>Creator ID / Handle</label>
+ 
+              <div className="flex flex-col items-start w-full">
+                <label className="text-[11px] font-semibold text-white/55 tracking-wider uppercase mb-1.5 block text-left font-inter w-full">Creator ID / Handle</label>
                 <input
+                  className="w-full bg-white/5 border border-white/10 rounded-lg py-[11px] px-3.5 text-white font-inter text-sm outline-none transition-all duration-200 focus:border-[#7c3aed] focus:bg-[#7c3aed]/8"
                   type="text"
                   placeholder="@yourchannel or creator ID"
                   value={this.state.auditionForm.creatorId}
@@ -1329,10 +1175,11 @@ class Splash extends Component {
                   required
                 />
               </div>
-
-              <div className="audition-field">
-                <label>Email</label>
+ 
+              <div className="flex flex-col items-start w-full">
+                <label className="text-[11px] font-semibold text-white/55 tracking-wider uppercase mb-1.5 block text-left font-inter w-full">Email</label>
                 <input
+                  className="w-full bg-white/5 border border-white/10 rounded-lg py-[11px] px-3.5 text-white font-inter text-sm outline-none transition-all duration-200 focus:border-[#7c3aed] focus:bg-[#7c3aed]/8"
                   type="email"
                   placeholder="you@email.com"
                   value={this.state.auditionForm.email}
@@ -1340,52 +1187,53 @@ class Splash extends Component {
                   required
                 />
               </div>
-
-              <div className="audition-field">
-                <label>Video Link</label>
+ 
+              <div className="flex flex-col items-start w-full">
+                <label className="text-[11px] font-semibold text-white/55 tracking-wider uppercase mb-1.5 block text-left font-inter w-full">Video Link</label>
                 <input
+                  className="w-full bg-white/5 border border-white/10 rounded-lg py-[11px] px-3.5 text-white font-inter text-sm outline-none transition-all duration-200 focus:border-[#7c3aed] focus:bg-[#7c3aed]/8"
                   type="url"
                   placeholder="Paste YouTube / Instagram / video URL"
                   value={this.state.auditionForm.videoLink}
                   onChange={e => this.handleAuditionField('videoLink', e.target.value)}
                 />
-
+ 
                 {/* ── VIDEO PREVIEW ── */}
                 {this.state.auditionVideoEmbed && (
-                  <div className="audition-preview">
+                  <div className="w-full mt-3 rounded-lg overflow-hidden border border-white/8 bg-[#0a0a14] aspect-video flex items-center justify-center animate-audition-fadein">
                     {typeof this.state.auditionVideoEmbed === 'string' ? (
                       <iframe
                         src={this.state.auditionVideoEmbed}
                         title="Video Preview"
                         allowFullScreen
                         allow="autoplay; encrypted-media"
-                        className="audition-preview-iframe"
+                        className="w-full h-full block border-none"
                       />
                     ) : this.state.auditionVideoEmbed.type === 'video' ? (
                       <video
                         src={this.state.auditionVideoEmbed.url}
                         controls
-                        className="audition-preview-video"
+                        className="w-full h-full block border-none"
                       />
                     ) : (
                       <a
                         href={this.state.auditionVideoEmbed.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="audition-preview-link"
+                        className="flex items-center gap-[10px] p-3 bg-[#0a0a14] hover:bg-[#7c3aed]/10 rounded-lg text-xs text-[#a78bfa] no-underline truncate w-full justify-between transition-colors duration-200 font-inter"
                       >
                         <span>🔗</span>
-                        <span className="audition-preview-link-url">{this.state.auditionVideoEmbed.url}</span>
-                        <span className="audition-preview-link-arrow">↗</span>
+                        <span className="truncate flex-1 text-left pl-1 text-white/55">{this.state.auditionVideoEmbed.url}</span>
+                        <span className="text-[#7c3aed] text-base flex-shrink-0">↗</span>
                       </a>
                     )}
                   </div>
                 )}
               </div>
-
+ 
               <button
                 type="submit"
-                className="audition-submit-btn"
+                className="w-full bg-gradient-to-br from-[#7c3aed] to-[#a855f7] text-white border-none rounded-xl py-3.25 px-3.5 text-[15px] font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed mt-2 font-inter"
                 disabled={this.state.auditionSubmitting}
               >
                 {this.state.auditionSubmitting ? 'Submitting…' : '🚀 Submit Audition'}
@@ -1398,54 +1246,54 @@ class Splash extends Component {
   )}
 
   {this.state.showHowItWorksModal && (
-    <div className="vip-modal-overlay" onClick={(e) => { if (e.target.classList.contains('vip-modal-overlay')) this.closeHowItWorksModal(); }}>
-      <div className="info-modal-card">
-        <button className="vip-modal-close" onClick={this.closeHowItWorksModal}>✕</button>
-        <h2 className="info-modal-heading">⚡ How Spotlight Works</h2>
-        <p className="info-modal-subheading">Feature your video on our high-traffic splash page.</p>
+    <div className="fixed inset-0 w-screen h-screen bg-black/70 backdrop-blur-md flex items-center justify-center z-[1000] p-5 box-border animate-audition-fadein" onClick={(e) => { if (e.target.classList.contains('fixed')) this.closeHowItWorksModal(); }}>
+      <div className="relative bg-[#0f172a] border-2 border-[#8b5cf6] rounded-[24px] p-8 w-full max-w-[600px] max-h-[85vh] overflow-y-auto shadow-[0_0_35px_rgba(139,92,246,0.3)] animate-modal-zoom-in scrollbar-thin scrollbar-track-[#090d22] scrollbar-thumb-[#8b5cf6] sm:py-6 sm:px-4 sm:rounded-2xl sm:max-h-[95vh]">
+        <button className="absolute top-4 right-4 bg-white/5 border border-white/10 text-white/60 w-8 h-8 rounded-full cursor-pointer flex items-center justify-center transition-colors duration-200 hover:bg-red-500/20 hover:text-white" onClick={this.closeHowItWorksModal}>✕</button>
+        <h2 className="text-white text-2xl font-bold font-oswald m-0 mb-2 text-left">⚡ How Spotlight Works</h2>
+        <p className="text-[#94a3b8] font-inter text-sm m-0 mb-7 text-left leading-normal">Feature your video on our high-traffic splash page.</p>
         
-        <div className="info-steps">
-          <div className="info-step">
-            <span className="info-step-num">1</span>
+        <div className="flex flex-col gap-5 text-left mb-8">
+          <div className="flex gap-4 items-start bg-white/2 border border-white/5 p-4 rounded-2xl transition-all duration-200 hover:bg-white/4 hover:border-[#8b5cf6]/25 hover:translate-x-1">
+            <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] text-white flex items-center justify-center font-bold text-[15px] shrink-0 shadow-[0_0_10px_rgba(139,92,246,0.4)]">1</span>
             <div>
-              <h3>Choose Your Spotlight Option</h3>
-              <p>Select <strong>👑 VIP Spotlight</strong> for guaranteed instant featuring for 25 hours, or apply via <strong>🚀 Audition</strong> to enter the review queue.</p>
+              <h3 className="text-white font-inter text-base font-semibold m-0 mb-1">Choose Your Spotlight Option</h3>
+              <p className="text-[#94a3b8] font-inter text-[13.5px] leading-normal m-0">Select <strong>👑 VIP Spotlight</strong> for guaranteed instant featuring for 25 hours, or apply via <strong>🚀 Audition</strong> to enter the review queue.</p>
             </div>
           </div>
-          <div className="info-step">
-            <span className="info-step-num">2</span>
+          <div className="flex gap-4 items-start bg-white/2 border border-white/5 p-4 rounded-2xl transition-all duration-200 hover:bg-white/4 hover:border-[#8b5cf6]/25 hover:translate-x-1">
+            <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] text-white flex items-center justify-center font-bold text-[15px] shrink-0 shadow-[0_0_10px_rgba(139,92,246,0.4)]">2</span>
             <div>
-              <h3>Provide Your Details</h3>
-              <p>Enter your name, mobile number, email address, and your YouTube video URL link.</p>
+              <h3 className="text-white font-inter text-base font-semibold m-0 mb-1">Provide Your Details</h3>
+              <p className="text-[#94a3b8] font-inter text-[13.5px] leading-normal m-0">Enter your name, mobile number, email address, and your YouTube video URL link.</p>
             </div>
           </div>
-          <div className="info-step">
-            <span className="info-step-num">3</span>
+          <div className="flex gap-4 items-start bg-white/2 border border-white/5 p-4 rounded-2xl transition-all duration-200 hover:bg-white/4 hover:border-[#8b5cf6]/25 hover:translate-x-1">
+            <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] text-white flex items-center justify-center font-bold text-[15px] shrink-0 shadow-[0_0_10px_rgba(139,92,246,0.4)]">3</span>
             <div>
-              <h3>Feature Goes Live</h3>
-              <p>For VIP, complete the checkout. For Audition, wait for review. Once verified, your video goes live instantly at the top of our page!</p>
+              <h3 className="text-white font-inter text-base font-semibold m-0 mb-1">Feature Goes Live</h3>
+              <p className="text-[#94a3b8] font-inter text-[13.5px] leading-normal m-0">For VIP, complete the checkout. For Audition, wait for review. Once verified, your video goes live instantly at the top of our page!</p>
             </div>
           </div>
         </div>
 
-        <div className="info-proofs-section">
-          <h3 className="proofs-heading">📈 Proof of Results</h3>
-          <p className="proofs-subheading">Here are some performance screenshots showing views and impressions generated via Spotlight:</p>
-          <div className="proofs-grid">
-            <div className="proof-card">
-              <img src={ss01} alt="Campaign Stats 1" className="proof-img" loading="lazy" />
+        <div className="border-t border-white/10 pt-7 text-left">
+          <h3 className="font-oswald text-white text-[22px] font-bold m-0 mb-2">📈 Proof of Results</h3>
+          <p className="font-inter text-[#94a3b8] text-sm m-0 mb-5 leading-normal">Here are some performance screenshots showing views and impressions generated via Spotlight:</p>
+          <div className="flex flex-col gap-4">
+            <div className="bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8b5cf6]">
+              <img src={ss01} alt="Campaign Stats 1" className="w-full h-auto block object-contain" loading="lazy" />
             </div>
-            <div className="proof-card">
-              <img src={ss02} alt="Campaign Stats 2" className="proof-img" loading="lazy" />
+            <div className="bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8b5cf6]">
+              <img src={ss02} alt="Campaign Stats 2" className="w-full h-auto block object-contain" loading="lazy" />
             </div>
-            <div className="proof-card">
-              <img src={ss03} alt="Campaign Stats 3" className="proof-img" loading="lazy" />
+            <div className="bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8b5cf6]">
+              <img src={ss03} alt="Campaign Stats 3" className="w-full h-auto block object-contain" loading="lazy" />
             </div>
-            <div className="proof-card">
-              <img src={ss04} alt="Campaign Stats 4" className="proof-img" loading="lazy" />
+            <div className="bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8b5cf6]">
+              <img src={ss04} alt="Campaign Stats 4" className="w-full h-auto block object-contain" loading="lazy" />
             </div>
-            <div className="proof-card">
-              <img src={ss05} alt="Campaign Stats 5" className="proof-img" loading="lazy" />
+            <div className="bg-[#1e293b] border border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8b5cf6]">
+              <img src={ss05} alt="Campaign Stats 5" className="w-full h-auto block object-contain" loading="lazy" />
             </div>
           </div>
         </div>
