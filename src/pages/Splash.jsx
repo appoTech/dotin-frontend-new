@@ -365,7 +365,7 @@ class Splash extends Component {
         customer_name: name,
         customer_email: email,
         customer_phone: mobile,
-        amount: 20000,
+        amount: 7000,
         OrderType: "vip_spotlight",
         promotion_data: {
           title: "VIP Spotlight",
@@ -853,7 +853,7 @@ class Splash extends Component {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button className="bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white border border-[#fbbf24] font-inter font-bold text-lg py-3.5 px-7 rounded-2xl cursor-pointer shadow-[0_4px_15px_rgba(217,119,6,0.3)] hover:shadow-[0_8px_25px_rgba(217,119,6,0.5)] transition-all duration-300 hover:-translate-y-0.75 flex items-center gap-2" onClick={this.openVipModal}>
-              👑 VIP Spotlight (₹20,000)
+              👑 VIP Spotlight (₹7,000)
             </button>
             <button className="bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white border border-[#818cf8] font-inter font-bold text-lg py-3.5 px-7 rounded-2xl cursor-pointer shadow-[0_4px_15px_rgba(79,70,229,0.3)] hover:shadow-[0_8px_25px_rgba(79,70,229,0.5)] transition-all duration-300 hover:-translate-y-0.75 flex items-center gap-2" onClick={this.openAuditionModal}>
               🚀 Audition (Promote it)
