@@ -1070,7 +1070,7 @@ class Splash extends Component {
 
             <div className="bg-[#1e1b4b] border border-[#312e81] p-4 rounded-xl flex justify-between items-center mb-6 mt-4">
               <span className="font-inter text-[#818cf8] font-semibold text-sm">VIP Spotlight Fee</span>
-              <strong className="font-inter text-[#fbbf24] text-xl font-bold">₹20,000</strong>
+              <strong className="font-inter text-[#fbbf24] text-xl font-bold">₹7,000</strong>
             </div>
 
             {this.state.vipResult && !this.state.vipResult.success && (
