@@ -232,7 +232,7 @@ class Splash extends Component {
     if (spotlightVideos && spotlightVideos.length > 0) {
       window.open(spotlightVideos[currentSpotlightIndex].ytvideoLink, "_blank");
     } else {
-      window.location.assign("https://youtu.be/JSOHK4pwJew");
+      window.location.assign("https://www.appopener.com/trending");
     }
   }
 
