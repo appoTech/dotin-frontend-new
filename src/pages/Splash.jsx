@@ -1002,7 +1002,7 @@ class Splash extends Component {
     onOpenChange={(isOpen) => this.setState({ shareTrayOpen: isOpen })} 
     setButtonText={(text) => console.log(text)} 
   />
-  <PipIframe src={"https://www.instagram.com/p/DSAJZZNia5T/"} />
+  <PipIframe src={"https://www.instagram.com/reel/Dacm6LzN6-D/"} />
 
   {this.state.showVipModal && (
     <div className="fixed inset-0 bg-[#020617]/85 backdrop-blur-[8px] flex items-center justify-center z-[9999] p-4">
