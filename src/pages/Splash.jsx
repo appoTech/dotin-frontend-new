@@ -285,7 +285,7 @@ class Splash extends Component {
       this.setState({ ostype: res.data.smartUrl.data.os_type });
       this.setState({ visitorcount: res.data.visitorCount || 0 });
       
-      const countdownTime = videos.length > 0 ? videos.length * 7 : 4;
+      const countdownTime = videos.length > 0 ? videos.length * 7 : 8;
       this.setState({ countdown: countdownTime });
 
       const newPromotes = Array.isArray(
