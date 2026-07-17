@@ -705,7 +705,7 @@ class Splash extends Component {
                 src={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
                     ? getYoutubeEmbedUrl(this.state.spotlightVideos[this.state.currentSpotlightIndex].ytvideoLink)
-                    : "https://www.youtube.com/embed/JSOHK4pwJew?autoplay=1&loop=1&mute=1"
+                    : "https://www.youtube.com/embed/2EKSldfyufo?autoplay=1&loop=1&mute=1"
                 }
                 title={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
@@ -1002,7 +1002,7 @@ class Splash extends Component {
     onOpenChange={(isOpen) => this.setState({ shareTrayOpen: isOpen })} 
     setButtonText={(text) => console.log(text)} 
   />
-  <PipIframe src={"https://www.instagram.com/reel/Dacm6LzN6-D/"} />
+  <PipIframe src={"https://www.instagram.com/reel/DazPwz_TaFM/"} />
 
   {this.state.showVipModal && (
     <div className="fixed inset-0 bg-[#020617]/85 backdrop-blur-[8px] flex items-center justify-center z-[9999] p-4">
