@@ -707,7 +707,7 @@ class Splash extends Component {
                 src={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
                     ? getYoutubeEmbedUrl(this.state.spotlightVideos[this.state.currentSpotlightIndex].ytvideoLink)
-                    : "https://www.youtube.com/embed/2EKSldfyufo?autoplay=1&loop=1&mute=1"
+                    : "https://www.youtube.com/embed/Zv_MxgUTFIE?autoplay=1&loop=1&mute=1"
                 }
                 title={
                   this.state.spotlightVideos && this.state.spotlightVideos.length > 0
