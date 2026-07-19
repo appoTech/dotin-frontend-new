@@ -145,17 +145,30 @@ const RollingCounter = ({ value, duration = 1000 }) => {
             }}
           >
             <a
-            href="https://stake.mba/?c=SEHXCte2"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/banner.png"
-              alt="AppOpener banner"
-              className="w-full h-full object-cover"
-            />
-          </a>
+              href="https://stake.mba/?c=SEHXCte2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/banner.png"
+                alt="AppOpener banner"
+                className="w-full h-full object-cover"
+              />
+            </a>
           </div>
+
+          <div
+            className="pointer-events-none absolute inset-x-4 top-0 h-6 opacity-50"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.4), transparent 90%)",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 class Splash extends Component {
   constructor(props) {
