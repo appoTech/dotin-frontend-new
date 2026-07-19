@@ -114,48 +114,6 @@ const RollingCounter = ({ value, duration = 1000 }) => {
   return <span className="font-bold">{count}</span>;
 };
 
- export function GlassBanner() {
-  return (
-    <div className="relative w-full flex justify-center pt-6 select-none">
-      <div className="relative" style={{ perspective: "1200px" }}>
-        <div className="pointer-events-none absolute -inset-8 -z-10 opacity-70">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-48 w-48 bg-fuchsia-500/40 blur-3xl" />
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 h-48 w-48 bg-cyan-400/40 blur-3xl" />
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-32 w-72 bg-indigo-500/30 blur-3xl" />
-        </div>
-
-        <div
-          className="relative backdrop-blur-md p-2"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(26,26,26,0.45) 0%, rgba(0,0,0,0.45) 100%)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -8px 24px rgba(0,0,0,0.55), 0 30px 60px -10px rgba(0,0,0,0.7)",
-            transform: "rotateX(6deg)",
-            clipPath:
-              "polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px))",
-          }}
-        >
-          <div
-            className="relative w-[320px] sm:w-[560px] h-[160px] sm:h-[280px] overflow-hidden bg-black/60"
-            style={{
-              clipPath:
-                "polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))",
-            }}
-          >
-            <a
-              href="https://stake.mba/?c=SEHXCte2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src={banner}
-                alt="AppOpener banner"
-                className="w-full h-full object-cover"
-              />
-            </a>
-          </div>
 
           <div
             className="pointer-events-none absolute inset-x-4 top-0 h-6 opacity-50"
@@ -861,7 +819,20 @@ class Splash extends Component {
           </div>
         )}
          {/*STake Banner*/}
-        <GlassBanner />
+        <div className="w-screen relative left-1/2 -translate-x-1/2 mb-6">
+          <a
+            href="https://stake.mba/?c=SEHXCte2"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block"
+          >
+            <img
+              src={banner}
+              alt="Stake Banner"
+              className="w-full h-auto object-cover"
+            />
+          </a>
+        </div>
         <div className="flex justify-center items-center mt-2 mb-4">
           <button className="inline-flex items-center gap-[7px] py-[10px] pr-[18px] pl-[14px] bg-black/55 backdrop-blur-[10px] border border-white/12 rounded-full text-white font-inter text-[28px] font-semibold tracking-[0.3px] cursor-default select-none animate-viewer-fadein transition-transform duration-200 hover:scale-[1.04]">
             <div className="w-3 h-3 rounded-full bg-[#22c55e] shrink-0 animate-pulse-dot"></div>
