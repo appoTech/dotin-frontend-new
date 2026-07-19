@@ -1025,23 +1025,13 @@ class Splash extends Component {
               {item.title}
             </div>
           </div>
+          
         ))}
     </div>
   </div>
 
-          <div
-            className="pointer-events-none absolute inset-x-4 top-0 h-6 opacity-50"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.4), transparent 90%)",
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-<GlassBanner />
+  {/*STake Banner*/}
+   <GlassBanner />
   {/* PORTAL IMAGE CONTAINER */}
   <a
     href="https://www.appopener.com/"
