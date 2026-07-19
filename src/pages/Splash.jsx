@@ -150,7 +150,7 @@ const RollingCounter = ({ value, duration = 1000 }) => {
               rel="noopener noreferrer"
             >
               <img
-                src="/banner.png"
+                src={banner}
                 alt="AppOpener banner"
                 className="w-full h-full object-cover"
               />
