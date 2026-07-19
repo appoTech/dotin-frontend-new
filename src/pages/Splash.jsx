@@ -860,7 +860,8 @@ class Splash extends Component {
             </button>
           </div>
         )}
-
+         {/*STake Banner*/}
+        <GlassBanner />
         <div className="flex justify-center items-center mt-2 mb-4">
           <button className="inline-flex items-center gap-[7px] py-[10px] pr-[18px] pl-[14px] bg-black/55 backdrop-blur-[10px] border border-white/12 rounded-full text-white font-inter text-[28px] font-semibold tracking-[0.3px] cursor-default select-none animate-viewer-fadein transition-transform duration-200 hover:scale-[1.04]">
             <div className="w-3 h-3 rounded-full bg-[#22c55e] shrink-0 animate-pulse-dot"></div>
@@ -1030,8 +1031,6 @@ class Splash extends Component {
     </div>
   </div>
 
-  {/*STake Banner*/}
-   <GlassBanner />
   {/* PORTAL IMAGE CONTAINER */}
   <a
     href="https://www.appopener.com/"
