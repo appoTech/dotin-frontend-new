@@ -115,19 +115,6 @@ const RollingCounter = ({ value, duration = 1000 }) => {
 };
 
 
-          <div
-            className="pointer-events-none absolute inset-x-4 top-0 h-6 opacity-50"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.4), transparent 90%)",
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 class Splash extends Component {
   constructor(props) {
     super(props);
